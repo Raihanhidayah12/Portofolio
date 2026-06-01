@@ -347,7 +347,7 @@ export default function FullWidthTabs() {
 
         <p className="text-center text-zinc-600 text-xs mb-5 max-w-md mx-auto">
 
-          Filter menurut kategori: Development, Design, atau Software
+          Filter menurut kategori: Frontend, Backend, Database, Mobile, Design, Cloud, DevOps
 
         </p>
 

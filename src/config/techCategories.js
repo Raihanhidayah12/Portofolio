@@ -1,12 +1,16 @@
 /** Kategori tech stack — selaras kolom `category` di Supabase. */
 
 export const TECH_CATEGORIES = [
-  { id: "Development", label: "Development", description: "Bahasa, framework, & library" },
+  { id: "Frontend Development", label: "Frontend Development", description: "HTML, CSS, framework UI, & library frontend" },
+  { id: "Backend Development", label: "Backend Development", description: "Runtime, framework, & API server" },
+  { id: "Database Management", label: "Database Management", description: "SQL, NoSQL, & ORM" },
+  { id: "Mobile Development", label: "Mobile Development", description: "Flutter, React Native, & mobile SDK" },
   { id: "Design", label: "Design", description: "UI/UX, grafis, & prototyping" },
-  { id: "Software", label: "Software", description: "Tools, hosting, & layanan" },
+  { id: "Cloud & Backend Services", label: "Cloud & Backend Services", description: "BaaS, hosting, & layanan cloud" },
+  { id: "Tools & DevOps", label: "Tools & DevOps", description: "CI/CD, version control, & tooling" },
 ];
 
-export const DEFAULT_TECH_CATEGORY = "Development";
+export const DEFAULT_TECH_CATEGORY = "Frontend Development";
 
 const CATEGORY_IDS = new Set(TECH_CATEGORIES.map((c) => c.id));
 

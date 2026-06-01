@@ -13,7 +13,7 @@ export const FALLBACK_TECH_STACK = [
     icon: "/html.svg",
     order_index: 1,
     is_published: true,
-    category: "Development",
+    category: "Frontend Development",
   },
   {
     id: "fallback-2",
@@ -21,7 +21,7 @@ export const FALLBACK_TECH_STACK = [
     icon: "/css.svg",
     order_index: 2,
     is_published: true,
-    category: "Development",
+    category: "Frontend Development",
   },
   {
     id: "fallback-3",
@@ -29,7 +29,7 @@ export const FALLBACK_TECH_STACK = [
     icon: "/javascript.svg",
     order_index: 3,
     is_published: true,
-    category: "Development",
+    category: "Frontend Development",
   },
   {
     id: "fallback-4",
@@ -37,7 +37,7 @@ export const FALLBACK_TECH_STACK = [
     icon: "/tailwind.svg",
     order_index: 4,
     is_published: true,
-    category: "Development",
+    category: "Frontend Development",
   },
   {
     id: "fallback-5",
@@ -45,7 +45,7 @@ export const FALLBACK_TECH_STACK = [
     icon: "/reactjs.svg",
     order_index: 5,
     is_published: true,
-    category: "Development",
+    category: "Frontend Development",
   },
   {
     id: "fallback-6",
@@ -53,7 +53,7 @@ export const FALLBACK_TECH_STACK = [
     icon: "/vite.svg",
     order_index: 6,
     is_published: true,
-    category: "Development",
+    category: "Frontend Development",
   },
 ];
 
