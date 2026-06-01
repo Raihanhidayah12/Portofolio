@@ -4,6 +4,7 @@ import { Github, Linkedin, Mail, ArrowUpRight, Instagram } from "lucide-react"
 import { SOCIAL_PROFILES, SOCIAL_SAME_AS } from "../config/social"
 import { SITE, pageTitle } from "../config/site"
 import { supabase } from "../supabase"
+import { getTechCategoryLabel } from "../config/techCategories"
 import {
   FALLBACK_TECH_STACK,
   fetchPublishedTechStack,
@@ -106,7 +107,10 @@ const TechChip = memo(({ item }) => (
       <span className="font-mono text-[10px] text-zinc-600">
         {formatTechStackIndex(item.order_index)}
       </span>
-      {item.name}
+      <span>{item.name}</span>
+      <span className="hidden sm:inline font-mono text-[9px] uppercase tracking-wider text-zinc-600 border-l border-zinc-800 pl-2">
+        {getTechCategoryLabel(item.category)}
+      </span>
     </span>
   </BorderGlow>
 ))

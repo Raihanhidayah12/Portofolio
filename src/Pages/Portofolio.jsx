@@ -27,7 +27,7 @@ import Box from "@mui/material/Box";
 
 import CardProject from "../components/CardProject";
 
-import TechStackLoop from "../components/TechStackLoop";
+import TechStackCategories from "../components/TechStackCategories";
 
 import AOS from "aos";
 import { aosStaggerDelay } from "../lib/aos";
@@ -339,13 +339,19 @@ export default function FullWidthTabs() {
         data-aos="fade-up"
       >
 
-        <p className="font-mono text-[10px] sm:text-xs uppercase tracking-[0.25em] text-sky-500/90 text-center mb-5">
+        <p className="font-mono text-[10px] sm:text-xs uppercase tracking-[0.25em] text-sky-500/90 text-center mb-2">
 
           Tech Stack
 
         </p>
 
-        <TechStackLoop techStacks={techStacks} />
+        <p className="text-center text-zinc-600 text-xs mb-5 max-w-md mx-auto">
+
+          Filter menurut kategori: Development, Design, atau Software
+
+        </p>
+
+        <TechStackCategories techStacks={techStacks} />
 
       </div>
 

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../../supabase";
 import { mapTechStack, techStackToDb, resolveTechStackIcon } from "../../utils/supabase/mappers";
+import { DEFAULT_TECH_CATEGORY, TECH_CATEGORIES } from "../../config/techCategories";
 import { Boxes, Plus, Trash2, Upload, Pencil } from "lucide-react";
 import {
   DashboardCard,
@@ -16,6 +17,7 @@ const emptyForm = {
   icon: "",
   order_index: 0,
   is_published: true,
+  category: DEFAULT_TECH_CATEGORY,
 };
 
 export default function TechStackAdmin() {
@@ -56,6 +58,7 @@ export default function TechStackAdmin() {
       icon: item.icon,
       order_index: item.order_index,
       is_published: item.is_published,
+      category: item.category ?? DEFAULT_TECH_CATEGORY,
     });
     setPreview(item.icon);
     setFile(null);
@@ -89,6 +92,7 @@ export default function TechStackAdmin() {
         icon: iconUrl,
         order_index: form.order_index,
         is_published: form.is_published,
+        category: form.category,
       });
 
       if (editingId) {
@@ -132,7 +136,7 @@ export default function TechStackAdmin() {
             {editingId ? "Edit Technology" : "Add Technology"}
           </h2>
 
-          <div className="grid sm:grid-cols-2 gap-4">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
             <label className="block space-y-1.5">
               <span className="text-xs text-gray-400">Name</span>
               <input
@@ -143,6 +147,20 @@ export default function TechStackAdmin() {
               />
             </label>
             <label className="block space-y-1.5">
+              <span className="text-xs text-gray-400">Category</span>
+              <select
+                value={form.category}
+                onChange={(e) => setForm((f) => ({ ...f, category: e.target.value }))}
+                className={`${inputClass} px-3 py-2 text-sm`}
+              >
+                {TECH_CATEGORIES.map((cat) => (
+                  <option key={cat.id} value={cat.id}>
+                    {cat.label}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className="block space-y-1.5 sm:col-span-2 lg:col-span-1">
               <span className="text-xs text-gray-400">Order</span>
               <input
                 type="number"
@@ -219,6 +237,9 @@ export default function TechStackAdmin() {
             <div className="p-4 flex flex-col items-center gap-2 text-center">
               <img src={item.icon} alt={item.name} className="w-14 h-14 object-contain" />
               <p className="text-sm font-medium text-zinc-100">{item.name}</p>
+              <p className="text-[10px] text-sky-500/80 font-mono uppercase tracking-wider">
+                {item.category}
+              </p>
               <p className="text-[10px] text-gray-500">Order: {item.order_index}</p>
               {!item.is_published && (
                 <span className="text-[10px] text-amber-400">Draft</span>

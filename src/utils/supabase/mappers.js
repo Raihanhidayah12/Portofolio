@@ -1,3 +1,5 @@
+import { DEFAULT_TECH_CATEGORY, normalizeTechCategory } from "../../config/techCategories";
+
 /** Map Supabase rows (snake_case) ↔ UI (PascalCase used in components). */
 
 export function projectFromDb(row) {
@@ -64,15 +66,17 @@ export function techStackFromDb(row) {
     Language: row.name ?? row.Language ?? "",
     order_index: row.order_index ?? row.orderIndex ?? 0,
     is_published: row.is_published ?? row.isPublished ?? true,
+    category: normalizeTechCategory(row.category ?? row.Category ?? DEFAULT_TECH_CATEGORY),
   };
 }
 
-export function techStackToDb({ name, icon, order_index, is_published }) {
+export function techStackToDb({ name, icon, order_index, is_published, category }) {
   return {
     name,
     icon,
     order_index: Number(order_index) || 0,
     is_published: is_published !== false,
+    category: normalizeTechCategory(category),
   };
 }
 
