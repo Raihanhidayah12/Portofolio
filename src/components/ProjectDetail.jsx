@@ -22,12 +22,20 @@ import { PageGridBg, SecondaryButton } from "./ui/layout";
 
 const TECH_ICONS = {
   React: Globe,
+  ReactJS: Globe,
   Tailwind: Layout,
+  "Tailwind CSS": Layout,
   Express: Cpu,
   Python: Code,
   Javascript: Code,
+  JavaScript: Code,
   HTML: Code,
   CSS: Code,
+  Vite: Package,
+  "Node JS": Cpu,
+  Bootstrap: Layout,
+  Firebase: Package,
+  Vercel: Globe,
   default: Package,
 };
 

@@ -5,6 +5,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import { supabase } from "../supabase";
 
 import { mapProjects, mapCertificates, mapTechStack } from "../utils/supabase/mappers";
+import { TECH_STACK_PUBLIC_COLUMNS } from "../utils/techStackQuery";
 
 
 
@@ -203,7 +204,7 @@ export default function FullWidthTabs() {
 
           .from("tech_stack")
 
-          .select("*")
+          .select(TECH_STACK_PUBLIC_COLUMNS)
 
           .eq("is_published", true)
 

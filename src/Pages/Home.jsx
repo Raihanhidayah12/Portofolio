@@ -4,6 +4,11 @@ import { Github, Linkedin, Mail, ArrowUpRight, Instagram } from "lucide-react"
 import { SOCIAL_PROFILES, SOCIAL_SAME_AS } from "../config/social"
 import { SITE, pageTitle } from "../config/site"
 import { supabase } from "../supabase"
+import {
+  FALLBACK_TECH_STACK,
+  fetchPublishedTechStack,
+  formatTechStackIndex,
+} from "../utils/techStackQuery"
 import BorderGlow from "../components/BorderGlow"
 import { GlowLink, GlowCard } from "../components/ui/layout"
 import { GLOW_CHIP_PROPS } from "../components/ui/borderGlowConfig"
@@ -91,7 +96,7 @@ const HeroDescription = memo(() => {
   )
 })
 
-const TechChip = memo(({ tech, index }) => (
+const TechChip = memo(({ item }) => (
   <BorderGlow
     {...GLOW_CHIP_PROPS}
     backgroundColor="rgba(24, 24, 27, 0.9)"
@@ -99,9 +104,9 @@ const TechChip = memo(({ tech, index }) => (
   >
     <span className="inline-flex items-center gap-2 px-3 py-1.5 text-xs text-zinc-300">
       <span className="font-mono text-[10px] text-zinc-600">
-        {String(index + 1).padStart(2, "0")}
+        {formatTechStackIndex(item.order_index)}
       </span>
-      {tech}
+      {item.name}
     </span>
   </BorderGlow>
 ))
@@ -143,7 +148,6 @@ const TYPING_SPEED = 85
 const ERASING_SPEED = 45
 const PAUSE_DURATION = 2200
 const TAGLINE_WORDS = SITE.heroTaglines
-const FALLBACK_TECH = ["React", "Javascript", "Node.js", "Tailwind"]
 const SOCIAL_LINKS = [
   { icon: Github, link: SOCIAL_PROFILES.github.url, label: SOCIAL_PROFILES.github.label },
   { icon: Linkedin, link: SOCIAL_PROFILES.linkedin.url, label: SOCIAL_PROFILES.linkedin.label },
@@ -156,7 +160,7 @@ const Home = () => {
   const [wordIndex, setWordIndex] = useState(0)
   const [charIndex, setCharIndex] = useState(0)
   const [roleIndex, setRoleIndex] = useState(0)
-  const [techPills, setTechPills] = useState(FALLBACK_TECH)
+  const [techPills, setTechPills] = useState(FALLBACK_TECH_STACK)
   const [isLoaded, setIsLoaded] = useState(false)
 
   useEffect(() => {
@@ -172,14 +176,9 @@ const Home = () => {
 
   useEffect(() => {
     const loadTech = async () => {
-      const { data, error } = await supabase
-        .from("tech_stack")
-        .select("name")
-        .eq("is_published", true)
-        .order("order_index", { ascending: true })
-        .limit(6)
-      if (!error && data?.length) {
-        setTechPills(data.map((row) => row.name))
+      const { data, error } = await fetchPublishedTechStack(supabase, { limit: 6 })
+      if (!error && data.length) {
+        setTechPills(data)
       }
     }
     loadTech()
@@ -280,8 +279,8 @@ const Home = () => {
               data-aos="fade-up"
               data-aos-delay="1000"
             >
-              {techPills.map((tech, index) => (
-                <TechChip key={tech} tech={tech} index={index} />
+              {techPills.map((item) => (
+                <TechChip key={item.id} item={item} />
               ))}
             </div>
 
