@@ -58,7 +58,7 @@ Portofolio web modern untuk **Muhammad Raihan Hidayah** — mahasiswa D3 Teknolo
 ## 📁 Struktur Proyek
 
 ```
-Portofolio_V5/
+Portofolio/
 ├── public/                 # Aset statis (Photo.jpg, hero-workspace.mp4, …)
 ├── scripts/                # create-admin, reset-admin, verify-admin, …
 ├── src/
@@ -105,8 +105,8 @@ Edit **`src/config/social.js`** untuk semua link sosial.
 ### 1. Clone & install
 
 ```bash
-git clone https://github.com/Raihanhidayah12/Portofolio_V5.git
-cd Portofolio_V5
+git clone https://github.com/Raihanhidayah12/Portofolio.git
+cd Portofolio
 npm install
 ```
 
@@ -406,6 +406,15 @@ Preset animasi: `src/lib/motion.js`, `src/lib/aos.js`
 | Komentar tidak realtime | Aktifkan Realtime pada tabel `portfolio_comments` |
 | Animasi terasa berat | Sistem menghormati `prefers-reduced-motion` di OS |
 | Route 404 setelah deploy | Pastikan SPA rewrite / fallback ke `index.html` |
+| Sidebar GitHub "No contributors" | Verifikasi email commit di [GitHub Emails](https://github.com/settings/emails), lalu push commit baru |
+
+---
+
+## 👤 Kontributor
+
+| | |
+|---|---|
+| ![@Raihanhidayah12](https://github.com/Raihanhidayah12.png?size=96) | **[Muhammad Raihan Hidayah](https://github.com/Raihanhidayah12)** — pengembang utama |
 
 ---
 
@@ -417,6 +426,3 @@ GitHub: [@Raihanhidayah12](https://github.com/Raihanhidayah12) · LinkedIn: [Pro
 ---
 
 ⭐ Jika proyek ini bermanfaat, berikan star di GitHub!
-#   P o r t o f o l i o  
- #   P o r t o f o l i o  
- 
