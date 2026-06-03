@@ -1,4 +1,3 @@
-import * as faceapi from 'face-api.js';
 import { BloomEffect, ChromaticAberrationEffect, EffectComposer, EffectPass, RenderPass } from 'postprocessing';
 import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
@@ -670,6 +669,7 @@ export const GridScan = ({
     let canceled = false;
     const load = async () => {
       try {
+        const faceapi = await import('face-api.js');
         await Promise.all([
           faceapi.nets.tinyFaceDetector.loadFromUri(modelsPath),
           faceapi.nets.faceLandmark68TinyNet.loadFromUri(modelsPath)
@@ -705,7 +705,7 @@ export const GridScan = ({
         return;
       }
 
-      const opts = new faceapi.TinyFaceDetectorOptions({ inputSize: 320, scoreThreshold: 0.5 });
+      const opts = new (await import('face-api.js')).TinyFaceDetectorOptions({ inputSize: 320, scoreThreshold: 0.5 });
 
       const detect = async ts => {
         if (stop) return;
@@ -713,6 +713,7 @@ export const GridScan = ({
         if (ts - lastDetect >= 33) {
           lastDetect = ts;
           try {
+            const faceapi = await import('face-api.js');
             const res = await faceapi.detectSingleFace(video, opts).withFaceLandmarks(true);
             if (res && res.detection) {
               const det = res.detection;
