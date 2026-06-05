@@ -208,7 +208,7 @@ const AboutPage = () => {
 
             <div className="flex flex-col lg:flex-row items-stretch lg:items-start gap-3 w-full">
               <GlowLink
-                href="https://drive.google.com/file/d/1Gbhv9PdMeE6D9a3TjAgczG8g4nxq5Uom/view?usp=sharing"
+                href="https://drive.google.com/file/d/1LKXV3D5JiGCj9wCCmpPvi_AAGoYi8zWf/view?usp=sharing"
                 target="_blank"
                 rel="noopener noreferrer"
                 variant="primary"
