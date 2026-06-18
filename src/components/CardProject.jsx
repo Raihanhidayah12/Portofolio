@@ -3,7 +3,7 @@ import { ExternalLink, ArrowRight } from "lucide-react";
 import { toSlug } from "../utils/slug";
 import { GlowCard, GlowLink } from "./ui/layout";
 
-const CardProject = ({ Img, Title, Description, Link: ProjectLink, id }) => {
+const CardProject = ({ Img, Title, Description, Link: ProjectLink, id, Category }) => {
   const handleLiveDemo = (e) => {
     if (!ProjectLink) {
       e.preventDefault();
@@ -31,7 +31,7 @@ const CardProject = ({ Img, Title, Description, Link: ProjectLink, id }) => {
 
         <div className="flex flex-1 flex-col p-5">
           <p className="font-mono text-[10px] uppercase tracking-widest text-zinc-600 mb-2">
-            Project
+            {Category === 'uiux' ? 'UI/UX Design' : Category === 'app' ? 'Mobile App' : Category === 'web' ? 'Web App / Website' : 'Project'}
           </p>
           <h3 className="text-lg font-semibold text-zinc-100">{Title}</h3>
           <p className="mt-2 flex-1 text-sm leading-relaxed text-zinc-500 line-clamp-2">

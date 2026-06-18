@@ -174,7 +174,7 @@ const APP_KEYWORDS = ["flutter", "react native", "dart", "kotlin", "swift", "and
 const UIUX_KEYWORDS = ["figma", "adobe xd", "sketch", "prototype", "wireframe", "ui/ux", "ui", "ux", "design"];
 
 function getProjectCategory(project) {
-  if (project.category) return project.category;
+  if (project.category || project.Category) return project.category || project.Category;
   const stack = (project.TechStack || []).map((t) => t.toLowerCase());
   const title = (project.Title || "").toLowerCase();
   const desc = (project.Description || "").toLowerCase();
@@ -483,9 +483,8 @@ export default function FullWidthTabs() {
                       Description={project.Description}
 
                       Link={project.Link}
-
                       id={project.id}
-
+                      Category={project.Category}
                     />
 
                   </div>

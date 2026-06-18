@@ -99,6 +99,9 @@ const ProjectCard = ({ project, onDelete, onEdit }) => {
         )}
         {project.TechStack?.length > 0 && (
           <div className="flex flex-wrap gap-1.5 mb-3">
+            <span className="px-2 py-0.5 border border-amber-500/25 bg-amber-500/10 text-amber-300 text-xs capitalize">
+              {project.Category === 'uiux' ? 'UI/UX' : project.Category || 'Web'}
+            </span>
             {project.TechStack.map((t) => (
               <span
                 key={t}
@@ -206,6 +209,7 @@ const ProjectForm = ({
           : p.Features || "",
         Link: p.Link || "",
         Github: p.Github || "",
+        Category: p.Category || "web",
       };
     })(),
   });
@@ -251,6 +255,21 @@ const ProjectForm = ({
             rows={3}
             className={`${inputClass} px-4 py-2.5 text-sm resize-none min-h-[100px]`}
           />
+        </div>
+
+        <div className="sm:col-span-2 space-y-1.5">
+          <label className="font-mono text-[10px] text-sky-500/80 uppercase tracking-widest">
+            Category
+          </label>
+          <select
+            value={form.Category}
+            onChange={set("Category")}
+            className={`${inputClass} px-4 py-2.5 text-sm appearance-none bg-zinc-950`}
+          >
+            <option value="web">Web App / Website</option>
+            <option value="app">Mobile App</option>
+            <option value="uiux">UI/UX Design</option>
+          </select>
         </div>
 
         <InputField
@@ -376,6 +395,7 @@ export default function Projects() {
           .filter(Boolean),
         Link: form.Link,
         Github: form.Github,
+        Category: form.Category,
       })
     );
     setShowCreate(false);
@@ -402,6 +422,7 @@ export default function Projects() {
             .filter(Boolean),
           Link: form.Link,
           Github: form.Github,
+          Category: form.Category,
         })
       )
       .eq("id", editProject.id);

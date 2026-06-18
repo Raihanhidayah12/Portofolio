@@ -13,10 +13,11 @@ export function projectFromDb(row) {
     Github: row.github ?? row.Github ?? "",
     TechStack: row.tech_stack ?? row.TechStack ?? [],
     Features: row.features ?? row.Features ?? [],
+    Category: row.category ?? row.Category ?? "web",
   };
 }
 
-export function projectToDb({ Title, Description, Img, Link, Github, TechStack, Features }) {
+export function projectToDb({ Title, Description, Img, Link, Github, TechStack, Features, Category }) {
   return {
     title: Title,
     description: Description,
@@ -25,6 +26,7 @@ export function projectToDb({ Title, Description, Img, Link, Github, TechStack, 
     github: Github,
     tech_stack: TechStack,
     features: Features,
+    category: Category || "web",
   };
 }
 
