@@ -285,24 +285,12 @@ const AboutPage = () => {
 
             <div className="flex flex-col lg:flex-row items-stretch lg:items-start gap-3 w-full">
               <GlowLink
-                href="https://drive.google.com/file/d/1LKXV3D5JiGCj9wCCmpPvi_AAGoYi8zWf/view?usp=sharing"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="#Portofolio"
                 variant="primary"
                 wrapperClassName="w-full lg:w-auto"
                 className="!px-6"
                 data-aos="fade-up"
                 data-aos-delay="160"
-              >
-                <FileText className="w-4 h-4" /> Download CV
-              </GlowLink>
-              <GlowLink
-                href="#Portofolio"
-                variant="secondary"
-                wrapperClassName="w-full lg:w-auto"
-                className="!px-6"
-                data-aos="fade-up"
-                data-aos-delay="200"
               >
                 <Code className="w-4 h-4" /> View Projects
               </GlowLink>

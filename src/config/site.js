@@ -30,7 +30,7 @@ export const SITE = {
   profileStatus: "Available for work",
   profileContactLabel: "Hubungi Saya",
   profileAvatar: "/Photo.jpg",
-  cvUrl: "https://drive.google.com/file/d/1LKXV3D5JiGCj9wCCmpPvi_AAGoYi8zWf/view?usp=sharing",
+  cvUrl: "https://drive.google.com/file/d/18Qrn2-JZ71vl26h2JGLhpXiPj8dGaiOS/view?usp=drive_link",
 
   /** Pendidikan */
   education: [
