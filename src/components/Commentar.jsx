@@ -234,63 +234,40 @@ const Komentar = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState('');
 
-    // Fetch pinned comment
+    // Fetch all comments and split pinned vs regular in JS
     useEffect(() => {
-        const fetchPinnedComment = async () => {
+        const fetchAllComments = async () => {
             try {
                 const { data, error } = await supabase
                     .from('portfolio_comments')
                     .select('*')
-                    .eq('is_pinned', true)
-                    .single();
-                
-                if (error && error.code !== 'PGRST116') {
-                    console.error('Error fetching pinned comment:', error);
-                    return;
-                }
-                
-                if (data) {
-                    setPinnedComment(data);
-                }
-            } catch (error) {
-                console.error('Error fetching pinned comment:', error);
+                    .order('created_at', { ascending: false });
+
+                if (error || !data) return;
+
+                const pinned = data.find((c) => c.is_pinned === true) || null;
+                const regular = data.filter((c) => c.is_pinned !== true);
+
+                setPinnedComment(pinned);
+                setComments(regular);
+            } catch {
+                // Table may not exist yet
             }
         };
 
-        fetchPinnedComment();
-    }, []);
-
-    // Fetch regular comments (excluding pinned) and set up real-time subscription
-    useEffect(() => {
-        const fetchComments = async () => {
-            const { data, error } = await supabase
-                .from('portfolio_comments')
-                .select('*')
-                .eq('is_pinned', false)
-                .order('created_at', { ascending: false });
-            
-            if (error) {
-                console.error('Error fetching comments:', error);
-                return;
-            }
-            
-            setComments(data || []);
-        };
-
-        fetchComments();
+        fetchAllComments();
 
         // Set up real-time subscription
         const subscription = supabase
             .channel('portfolio_comments')
-            .on('postgres_changes', 
-                { 
-                    event: '*', 
-                    schema: 'public', 
-                    table: 'portfolio_comments',
-                    filter: 'is_pinned=eq.false'
-                }, 
+            .on('postgres_changes',
+                {
+                    event: '*',
+                    schema: 'public',
+                    table: 'portfolio_comments'
+                },
                 () => {
-                    fetchComments(); // Refresh comments when changes occur
+                    fetchAllComments();
                 }
             )
             .subscribe();
@@ -431,7 +408,7 @@ const Komentar = () => {
                     )}
                 </div>
             </div>
-            <style jsx>{`
+            <style>{`
                 .custom-scrollbar::-webkit-scrollbar {
                     width: 6px;
                 }

@@ -312,7 +312,7 @@ const ProjectDetails = () => {
           </div>
         </div>
 
-        <style jsx>{`
+        <style>{`
           .animate-fadeIn {
             animation: fadeIn 0.7s ease-out;
           }

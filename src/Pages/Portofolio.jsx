@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useMemo } from "react";
 
 
 
@@ -10,10 +10,6 @@ import { TECH_STACK_PUBLIC_COLUMNS } from "../utils/techStackQuery";
 
 
 import PropTypes from "prop-types";
-
-import SwipeableViews from "react-swipeable-views";
-
-import { useTheme } from "@mui/material/styles";
 
 import AppBar from "@mui/material/AppBar";
 
@@ -168,9 +164,28 @@ function a11yProps(index) {
 
 
 
-export default function FullWidthTabs() {
+const PROJECT_CATEGORIES = [
+  { id: "web", label: "Web" },
+  { id: "app", label: "App" },
+  { id: "uiux", label: "UI/UX" },
+];
 
-  const theme = useTheme();
+const APP_KEYWORDS = ["flutter", "react native", "dart", "kotlin", "swift", "android", "ios", "mobile", "expo"];
+const UIUX_KEYWORDS = ["figma", "adobe xd", "sketch", "prototype", "wireframe", "ui/ux", "ui", "ux", "design"];
+
+function getProjectCategory(project) {
+  if (project.category) return project.category;
+  const stack = (project.TechStack || []).map((t) => t.toLowerCase());
+  const title = (project.Title || "").toLowerCase();
+  const desc = (project.Description || "").toLowerCase();
+  const allText = [...stack, title, desc].join(" ");
+
+  if (APP_KEYWORDS.some((k) => allText.includes(k))) return "app";
+  if (UIUX_KEYWORDS.some((k) => allText.includes(k))) return "uiux";
+  return "web";
+}
+
+export default function FullWidthTabs() {
 
   const [value, setValue] = useState(0);
 
@@ -184,9 +199,16 @@ export default function FullWidthTabs() {
 
   const [showAllCertificates, setShowAllCertificates] = useState(false);
 
+  const [activeCategory, setActiveCategory] = useState(null);
+
   const isMobile = window.innerWidth < 768;
 
   const initialItems = isMobile ? 4 : 6;
+
+  const filteredProjects = useMemo(() => {
+    if (!activeCategory) return projects;
+    return projects.filter((p) => getProjectCategory(p) === activeCategory);
+  }, [projects, activeCategory]);
 
 
 
@@ -308,7 +330,7 @@ export default function FullWidthTabs() {
 
 
 
-  const displayedProjects = showAllProjects ? projects : projects.slice(0, initialItems);
+  const displayedProjects = showAllProjects ? filteredProjects : filteredProjects.slice(0, initialItems);
 
   const displayedCertificates = showAllCertificates ? certificates : certificates.slice(0, initialItems);
 
@@ -399,17 +421,43 @@ export default function FullWidthTabs() {
 
 
 
-        <SwipeableViews
+        <div>
 
-          axis={theme.direction === "rtl" ? "x-reverse" : "x"}
+          <TabPanel value={value} index={0}>
 
-          index={value}
+            <div className="flex flex-wrap justify-center gap-2 mb-6 px-2" role="tablist" aria-label="Filter by category">
+              <button
+                type="button"
+                onClick={() => setActiveCategory(null)}
+                className={`px-4 py-1.5 font-mono text-[10px] sm:text-xs uppercase tracking-wider border transition-colors ${
+                  !activeCategory
+                    ? "border-sky-500/50 bg-sky-500/10 text-sky-300"
+                    : "border-zinc-800 bg-zinc-950/60 text-zinc-500 hover:border-zinc-700 hover:text-zinc-300"
+                }`}
+              >
+                Semua
+              </button>
+              {PROJECT_CATEGORIES.map((cat) => (
+                <button
+                  key={cat.id}
+                  type="button"
+                  onClick={() => setActiveCategory(cat.id)}
+                  className={`px-4 py-1.5 font-mono text-[10px] sm:text-xs uppercase tracking-wider border transition-colors ${
+                    activeCategory === cat.id
+                      ? "border-sky-500/50 bg-sky-500/10 text-sky-300"
+                      : "border-zinc-800 bg-zinc-950/60 text-zinc-500 hover:border-zinc-700 hover:text-zinc-300"
+                  }`}
+                >
+                  {cat.label}
+                </button>
+              ))}
+            </div>
 
-          onChangeIndex={setValue}
-
-        >
-
-          <TabPanel value={value} index={0} dir={theme.direction}>
+            {activeCategory && (
+              <p className="text-center font-mono text-[10px] uppercase tracking-[0.2em] text-zinc-600 mb-4">
+                {filteredProjects.length} project{filteredProjects.length !== 1 ? "s" : ""} — <span className="text-sky-400">{PROJECT_CATEGORIES.find(c => c.id === activeCategory)?.label}</span>
+              </p>
+            )}
 
             <div className="container mx-auto flex justify-center items-center overflow-hidden">
 
@@ -448,7 +496,7 @@ export default function FullWidthTabs() {
 
             </div>
 
-            {projects.length > initialItems && (
+            {filteredProjects.length > initialItems && (
 
               <div className="mt-6 w-full flex justify-start">
 
@@ -468,7 +516,7 @@ export default function FullWidthTabs() {
 
 
 
-          <TabPanel value={value} index={1} dir={theme.direction}>
+          <TabPanel value={value} index={1}>
 
             <div className="container mx-auto flex justify-center items-center overflow-hidden">
 
@@ -513,7 +561,7 @@ export default function FullWidthTabs() {
 
           </TabPanel>
 
-        </SwipeableViews>
+        </div>
 
       </Box>
 

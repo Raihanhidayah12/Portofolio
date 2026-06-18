@@ -1,6 +1,7 @@
 import { Github, Linkedin, Instagram, ArrowUp, Mail } from "lucide-react";
 import { SITE } from "../config/site";
 import { SOCIAL_PROFILES } from "../config/social";
+import VisitorCounter from "./VisitorCounter";
 
 const FOOTER_NAV = [
   { href: "#Home", label: "Home" },
@@ -108,6 +109,7 @@ const Footer = () => {
           <p className="font-mono text-xs text-zinc-600 text-center sm:text-left">
             © {year} {SITE.fullName}. All rights reserved.
           </p>
+          <VisitorCounter />
           <button
             type="button"
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}

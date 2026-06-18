@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, memo, lazy, Suspense } from "react"
 import { Helmet } from "react-helmet-async"
-import { Github, Linkedin, Mail, ArrowUpRight, Instagram } from "lucide-react"
+import { Github, Linkedin, Mail, ArrowUpRight, Instagram, FileText } from "lucide-react"
 import { SOCIAL_PROFILES, SOCIAL_SAME_AS } from "../config/social"
 import { SITE, pageTitle } from "../config/site"
 import { supabase } from "../supabase"
@@ -166,9 +166,21 @@ const Home = () => {
   const [roleIndex, setRoleIndex] = useState(0)
   const [techPills, setTechPills] = useState(FALLBACK_TECH_STACK)
   const [isLoaded, setIsLoaded] = useState(false)
+  const [videoSrc, setVideoSrc] = useState("")
 
   useEffect(() => {
     setIsLoaded(true)
+  }, [])
+
+  useEffect(() => {
+    const loadVideo = () => setVideoSrc("/hero-workspace.mp4");
+    if (typeof window.requestIdleCallback === "function") {
+      const id = window.requestIdleCallback(loadVideo, { timeout: 3000 });
+      return () => window.cancelIdleCallback(id);
+    } else {
+      const id = setTimeout(loadVideo, 800);
+      return () => clearTimeout(id);
+    }
   }, [])
 
   useEffect(() => {
@@ -295,6 +307,16 @@ const Home = () => {
             >
               <CTAButton href="#Portofolio" text="Lihat Proyek" primary icon={ArrowUpRight} />
               <CTAButton href="#Contact" text="Hubungi Saya" icon={Mail} />
+              <GlowLink
+                href={SITE.cvUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                variant="secondary"
+                className="group"
+              >
+                <FileText className="w-4 h-4" />
+                Download CV
+              </GlowLink>
             </div>
 
             <div
@@ -325,16 +347,18 @@ const Home = () => {
                   <span className="h-2 w-2 rounded-full bg-zinc-600" />
                   <span className="h-2 w-2 rounded-full bg-zinc-600" />
                 </div>
+                {videoSrc && (
                 <video
-                  src="/hero-workspace.mp4"
+                  src={videoSrc}
                   autoPlay
                   loop
                   muted
                   playsInline
-                  preload="auto"
+                  preload="metadata"
                   className="relative z-[1] w-full object-cover pt-6 aspect-square"
                   aria-label="Futuristic software engineer workspace"
                 />
+                )}
                 <div
                   className="pointer-events-none absolute bottom-0 right-0 z-[2] h-11 w-24 sm:h-12 sm:w-28 bg-[#050508]"
                   aria-hidden

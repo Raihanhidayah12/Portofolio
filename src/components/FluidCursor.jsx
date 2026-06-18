@@ -1,36 +1,36 @@
 import { useLocation } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import SplashCursor from './SplashCursor';
 
-const HIDDEN_PREFIXES = ['/dashboard', '/login'];
-
-function shouldHideCursor(pathname) {
-  return HIDDEN_PREFIXES.some(
-    (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`)
-  );
+function shouldDisable(pathname, isMobile) {
+  if (isMobile) return true;
+  if (pathname !== '/') return true;
+  if (typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return true;
+  return false;
 }
 
-function getDyeResolution() {
-  if (typeof window === 'undefined') return 1024;
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return 0;
-  return window.matchMedia('(max-width: 768px)').matches ? 512 : 1024;
-}
-
-/** Efek fluid cursor — nonaktif di login/dashboard & reduced-motion */
 export default function FluidCursor() {
   const { pathname } = useLocation();
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window !== 'undefined' ? window.matchMedia('(max-width: 768px)').matches : false
+  );
 
-  if (shouldHideCursor(pathname)) return null;
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 768px)');
+    const handler = (e) => setIsMobile(e.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
 
-  const dyeResolution = getDyeResolution();
-  if (dyeResolution === 0) return null;
+  if (shouldDisable(pathname, isMobile)) return null;
 
   return (
     <SplashCursor
       COLOR="#00daff"
       RAINBOW_MODE={false}
       TRANSPARENT
-      DYE_RESOLUTION={dyeResolution}
-      SIM_RESOLUTION={128}
+      DYE_RESOLUTION={512}
+      SIM_RESOLUTION={64}
       SPLAT_FORCE={5000}
       DENSITY_DISSIPATION={4}
     />

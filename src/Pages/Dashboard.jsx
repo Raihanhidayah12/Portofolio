@@ -5,7 +5,8 @@ import Projects from './dashboard/Projects'
 import Certificates from './dashboard/Certificates'
 import Comments from './dashboard/Comments'
 import TechStack from './dashboard/TechStack'
-import { FolderGit2, Award, MessageSquare, LogOut, LayoutDashboard, Menu, Boxes } from 'lucide-react'
+import Journey from './dashboard/Journey'
+import { FolderGit2, Award, MessageSquare, LogOut, LayoutDashboard, Menu, Boxes, Route as RouteIcon } from 'lucide-react'
 import {
   DASHBOARD_BG,
   DashboardPageIcon,
@@ -18,6 +19,7 @@ const NAV_ITEMS = [
   { to: 'projects', label: 'Projects', icon: FolderGit2 },
   { to: 'certificates', label: 'Certificates', icon: Award },
   { to: 'tech-stack', label: 'Tech Stack', icon: Boxes },
+  { to: 'journey', label: 'Journey', icon: RouteIcon },
   { to: 'comments', label: 'Comments', icon: MessageSquare },
 ]
 
@@ -128,6 +130,7 @@ export default function Dashboard() {
             <Route path="projects" element={<Projects />} />
             <Route path="certificates" element={<Certificates />} />
             <Route path="tech-stack" element={<TechStack />} />
+            <Route path="journey" element={<Journey />} />
             <Route path="comments" element={<Comments />} />
           </Routes>
         </main>

@@ -30,6 +30,74 @@ export const SITE = {
   profileStatus: "Available for work",
   profileContactLabel: "Hubungi Saya",
   profileAvatar: "/Photo.jpg",
+  cvUrl: "https://drive.google.com/file/d/1LKXV3D5JiGCj9wCCmpPvi_AAGoYi8zWf/view?usp=sharing",
+
+  /** Pendidikan */
+  education: [
+    {
+      period: "2022 - Sekarang",
+      title: "D3 Teknologi Informasi",
+      org: "Universitas Brawijaya",
+      description: "Fokus pada Front-End Development, pemrograman web, dan pengembangan aplikasi mobile.",
+    },
+    // Tambah pendidikan lain di sini
+  ],
+
+  /** Pengalaman / Magang */
+  experience: [
+    {
+      period: "2024",
+      title: "Judul Posisi Magang",
+      org: "Nama Perusahaan",
+      description: "Deskripsi singkat tentang peran dan pencapaian utama.",
+    },
+    {
+      period: "2023",
+      title: "Judul Posisi Kedua",
+      org: "Nama Perusahaan / Freelance",
+      description: "Deskripsi singkat tentang peran dan pencapaian utama.",
+    },
+  ],
+
+  /** Organisasi */
+  organization: [
+    {
+      period: "2024",
+      title: "Jabatan / Peran",
+      org: "Nama Organisasi",
+      description: "Deskripsi singkat kontribusi dan tanggung jawab.",
+    },
+    {
+      period: "2023",
+      title: "Jabatan / Peran",
+      org: "Nama Organisasi",
+      description: "Deskripsi singkat kontribusi dan tanggung jawab.",
+    },
+    {
+      period: "2023",
+      title: "Jabatan / Peran",
+      org: "Nama Organisasi",
+      description: "Deskripsi singkat kontribusi dan tanggung jawab.",
+    },
+    {
+      period: "2022",
+      title: "Jabatan / Peran",
+      org: "Nama Organisasi",
+      description: "Deskripsi singkat kontribusi dan tanggung jawab.",
+    },
+    {
+      period: "2022",
+      title: "Jabatan / Peran",
+      org: "Nama Organisasi",
+      description: "Deskripsi singkat kontribusi dan tanggung jawab.",
+    },
+    {
+      period: "2022",
+      title: "Jabatan / Peran",
+      org: "Nama Organisasi",
+      description: "Deskripsi singkat kontribusi dan tanggung jawab.",
+    },
+  ],
 };
 
 export const pageTitle = (suffix) =>

@@ -83,3 +83,31 @@ export function techStackToDb({ name, icon, order_index, is_published, category 
 export function mapTechStack(rows) {
   return (rows ?? []).map(techStackFromDb);
 }
+
+export function journeyFromDb(row) {
+  if (!row) return row;
+  return {
+    ...row,
+    period: row.period ?? "",
+    title: row.title ?? "",
+    org: row.org ?? "",
+    description: row.description ?? "",
+    type: row.type ?? "education",
+    order_index: row.order_index ?? 0,
+  };
+}
+
+export function journeyToDb({ period, title, org, description, type, order_index }) {
+  return {
+    period,
+    title,
+    org,
+    description: description || "",
+    type,
+    order_index: Number(order_index) || 0,
+  };
+}
+
+export function mapJourney(rows) {
+  return (rows ?? []).map(journeyFromDb);
+}

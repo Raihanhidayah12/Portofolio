@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import React, { useState, lazy, Suspense } from "react";
 import { HelmetProvider } from "react-helmet-async";
 import "./index.css";
@@ -9,7 +9,7 @@ import AnimatedBackground from "./components/Background";
 import FluidCursor from "./components/FluidCursor";
 import { AnimatePresence, motion } from "framer-motion";
 import { useAOS } from "./hooks/useAOS";
-import { pageEnter } from "./lib/motion";
+import { pageEnter, routeTransition } from "./lib/motion";
 import Footer from "./components/Footer";
 
 import Login from "./Pages/Login";
@@ -57,62 +57,84 @@ const LandingPage = ({ showWelcome, setShowWelcome }) => {
 };
 
 const ProjectPageLayout = () => (
-  <>
+  <motion.div {...routeTransition}>
     <Suspense fallback={<div className="min-h-screen" />}>
       <ProjectDetails />
     </Suspense>
     <Footer />
-  </>
+  </motion.div>
 );
 
-function App() {
-  const [showWelcome, setShowWelcome] = useState(true);
+function AppRoutes() {
+  const location = useLocation();
 
   return (
-    
-    <HelmetProvider>
-      <div className="pointer-events-none">
-  <AnimatedBackground />
-</div>
-      <BrowserRouter>
-        <FluidCursor />
-        <Routes>
-          {/* PUBLIC */}
-          <Route
-            path="/"
-            element={
-              <LandingPage
-                showWelcome={showWelcome}
-                setShowWelcome={setShowWelcome}
-              />
-            }
-          />
+    <AnimatePresence mode="wait">
+      <Routes location={location} key={location.pathname}>
+        {/* PUBLIC */}
+        <Route
+          path="/"
+          element={<LandingPageWrapper />}
+        />
 
-          <Route path="/project/:slug" element={<ProjectPageLayout />} />
+        <Route path="/project/:slug" element={<ProjectPageLayout />} />
 
-          {/* AUTH */}
-          <Route path="/login" element={<Login />} />
+        {/* AUTH */}
+        <Route
+          path="/login"
+          element={
+            <motion.div {...routeTransition}>
+              <Login />
+            </motion.div>
+          }
+        />
 
-          {/* ADMIN (PROTECTED) */}
-          <Route
-            path="/dashboard/*"
-            element={
+        {/* ADMIN (PROTECTED) */}
+        <Route
+          path="/dashboard/*"
+          element={
+            <motion.div {...routeTransition}>
               <ProtectedRoute>
                 <Dashboard />
               </ProtectedRoute>
-            }
-          />
+            </motion.div>
+          }
+        />
 
-          {/* 404 */}
-          <Route
-            path="*"
-            element={
+        {/* 404 */}
+        <Route
+          path="*"
+          element={
+            <motion.div {...routeTransition}>
               <Suspense fallback={null}>
                 <NotFoundPage />
               </Suspense>
-            }
-          />
-        </Routes>
+            </motion.div>
+          }
+        />
+      </Routes>
+    </AnimatePresence>
+  );
+}
+
+function LandingPageWrapper() {
+  const [showWelcome, setShowWelcome] = useState(true);
+  return (
+    <motion.div {...routeTransition}>
+      <LandingPage showWelcome={showWelcome} setShowWelcome={setShowWelcome} />
+    </motion.div>
+  );
+}
+
+function App() {
+  return (
+    <HelmetProvider>
+      <div className="pointer-events-none">
+        <AnimatedBackground />
+      </div>
+      <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+        <FluidCursor />
+        <AppRoutes />
       </BrowserRouter>
     </HelmetProvider>
   );

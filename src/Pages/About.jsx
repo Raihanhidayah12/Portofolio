@@ -1,9 +1,11 @@
 import React, { memo, useMemo, useState, useEffect } from "react"
-import { FileText, Code, Award, Globe, ArrowUpRight, Mail } from "lucide-react"
+import { GitHubCalendar } from "react-github-calendar"
+import { FileText, Code, Award, Globe, ArrowUpRight, Mail, GraduationCap, Briefcase, Users } from "lucide-react"
 import { aosStaggerDelay } from "../lib/aos"
 import { SITE } from "../config/site"
+import { SOCIAL_PROFILES } from "../config/social"
 import { supabase } from "../supabase"
-import { mapProjects, mapCertificates } from "../utils/supabase/mappers"
+import { mapProjects, mapCertificates, mapJourney } from "../utils/supabase/mappers"
 import {
   SectionShell,
   SectionHeader,
@@ -95,9 +97,57 @@ function readCachedCount(key) {
   }
 }
 
+const TimelineSection = memo(({ title, icon: Icon, items }) => {
+  if (!items || !items.length) return null;
+
+  return (
+    <div>
+      <div className="flex items-center gap-3 mb-8 max-w-2xl mx-auto" data-aos="fade-up">
+        <div className="flex h-8 w-8 items-center justify-center border border-zinc-700 bg-zinc-900 text-sky-400">
+          <Icon className="w-4 h-4" />
+        </div>
+        <h4 className="text-lg font-semibold text-zinc-100">{title}</h4>
+        <span className="font-mono text-[10px] text-zinc-600">({items.length})</span>
+      </div>
+
+      <div className="relative max-w-2xl mx-auto">
+        <div className="absolute left-4 sm:left-6 top-0 bottom-0 w-px bg-zinc-800" aria-hidden />
+
+        <div className="space-y-6">
+          {items.map((item, index) => (
+            <div
+              key={index}
+              className="relative pl-12 sm:pl-16"
+              data-aos="fade-up"
+              data-aos-delay={aosStaggerDelay(index)}
+            >
+              <div className="absolute left-2.5 sm:left-4.5 top-5 flex h-3 w-3 items-center justify-center">
+                <span className="absolute h-3 w-3 rounded-full border border-sky-500/50 bg-[#050508]" />
+                <span className="h-1.5 w-1.5 rounded-full bg-sky-400" />
+              </div>
+
+              <GlowCard className="p-5">
+                <div className="min-w-0">
+                  <span className="font-mono text-[10px] uppercase tracking-widest text-sky-500/80">
+                    {item.period}
+                  </span>
+                  <h4 className="text-sm font-semibold text-zinc-100 mt-1">{item.title}</h4>
+                  <p className="text-xs text-sky-400/80 mt-0.5">{item.org}</p>
+                  <p className="text-xs text-zinc-500 mt-2 leading-relaxed">{item.description}</p>
+                </div>
+              </GlowCard>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+});
+
 const AboutPage = () => {
   const [totalProjects, setTotalProjects] = useState(() => readCachedCount("projects"));
   const [totalCertificates, setTotalCertificates] = useState(() => readCachedCount("certificates"));
+  const [journey, setJourney] = useState({ education: [], experience: [], organization: [] });
 
   const YearExperience = useMemo(() => {
     const startDate = new Date("2021-11-06");
@@ -137,6 +187,33 @@ const AboutPage = () => {
     return () => {
       cancelled = true;
     };
+  }, []);
+
+  useEffect(() => {
+    async function loadJourney() {
+      const { data, error } = await supabase
+        .from("journey")
+        .select("*")
+        .order("type")
+        .order("order_index", { ascending: true });
+
+      if (error || !data) {
+        setJourney({
+          education: SITE.education || [],
+          experience: SITE.experience || [],
+          organization: SITE.organization || [],
+        });
+        return;
+      }
+
+      const items = mapJourney(data);
+      setJourney({
+        education: items.filter((i) => i.type === "education"),
+        experience: items.filter((i) => i.type === "experience"),
+        organization: items.filter((i) => i.type === "organization"),
+      });
+    }
+    loadJourney();
   }, []);
 
   // Memoized stats data
@@ -242,6 +319,63 @@ const AboutPage = () => {
             ))}
           </div>
         </a>
+
+        {/* Journey Sections */}
+        <div className="mt-20 space-y-16">
+          <p className="font-mono text-[10px] sm:text-xs uppercase tracking-[0.25em] text-sky-500/90 text-center mb-3" data-aos="fade-up">
+            Journey
+          </p>
+          <h3 className="text-2xl md:text-3xl font-bold text-zinc-100 text-center mb-12" data-aos="fade-up" data-aos-delay="80">
+            Education, Experience & Organization
+          </h3>
+
+          <TimelineSection
+            title="Education"
+            icon={GraduationCap}
+            items={journey.education}
+          />
+
+          <TimelineSection
+            title="Experience"
+            icon={Briefcase}
+            items={journey.experience}
+          />
+
+          <TimelineSection
+            title="Organization"
+            icon={Users}
+            items={journey.organization}
+          />
+        </div>
+
+        {/* GitHub Contributions */}
+        <div className="mt-16" data-aos="fade-up">
+          <div className="flex items-center gap-3 mb-8 max-w-2xl mx-auto">
+            <div className="flex h-8 w-8 items-center justify-center border border-zinc-700 bg-zinc-900 text-sky-400">
+              <Code className="w-4 h-4" />
+            </div>
+            <h4 className="text-lg font-semibold text-zinc-100">GitHub Activity</h4>
+          </div>
+
+          <GlowCard className="p-5 sm:p-6 max-w-4xl mx-auto overflow-x-auto">
+            <div className="flex justify-center min-w-[700px]">
+              <GitHubCalendar
+                username={SOCIAL_PROFILES.github.handle.replace("@", "")}
+                colorScheme="dark"
+                fontSize={12}
+                blockSize={12}
+                blockMargin={4}
+                theme={{
+                  light: ["#161b22", "#0e4429", "#006d32", "#26a641", "#39d353"],
+                  dark: ["#161b22", "#0e4429", "#006d32", "#26a641", "#39d353"],
+                }}
+                labels={{
+                  totalCount: `{{count}} contributions in the last year`,
+                }}
+              />
+            </div>
+          </GlowCard>
+        </div>
       </div>
 
     </SectionShell>
