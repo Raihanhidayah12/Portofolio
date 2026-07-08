@@ -6,9 +6,26 @@ import Swal from "sweetalert2";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import axios from "axios";
+import { supabase } from "../supabase";
 import { SectionShell, SectionHeader, SurfaceCard, inputClass, PrimaryButton } from "../components/ui/layout";
 
 const SWAL_OK = "#38bdf8";
+
+const saveMessageToSupabase = async ({ name, email, message }) => {
+  const { error } = await supabase.from("portfolio_messages").insert([
+    {
+      name,
+      email,
+      message,
+      is_read: false,
+      created_at: new Date().toISOString(),
+    },
+  ]);
+
+  if (error) {
+    throw error;
+  }
+};
 
 const ContactPage = () => {
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
@@ -44,21 +61,44 @@ const ContactPage = () => {
       submitData.append("_captcha", "false");
       submitData.append("_template", "table");
 
-      await axios.post(formSubmitUrl, submitData, {
+      const formSubmitPromise = axios.post(formSubmitUrl, submitData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
+      const supabasePromise = saveMessageToSupabase(formData);
+
+      const [formResult, dbResult] = await Promise.allSettled([
+        formSubmitPromise,
+        supabasePromise,
+      ]);
+
+      const formSubmitSucceeded = formResult.status === "fulfilled";
+      const supabaseSaved = dbResult.status === "fulfilled";
+
+      if (!formSubmitSucceeded && !supabaseSaved) {
+        const reason = formResult.status === "rejected" ? formResult.reason : dbResult.reason;
+        throw reason;
+      }
+
+      if (!supabaseSaved) {
+        console.warn("Supabase save failed for contact message:", dbResult.reason);
+      }
 
       Swal.fire({
-        title: "Berhasil!",
-        text: "Pesan Anda telah berhasil terkirim!",
-        icon: "success",
+        title: supabaseSaved ? "Berhasil!" : "Berhasil, tapi...",
+        text: supabaseSaved
+          ? "Pesan Anda telah berhasil terkirim dan tersimpan di dashboard admin!"
+          : "Pesan Anda telah berhasil dikirim, tetapi tidak tersimpan di database Supabase. Periksa kebijakan RLS tabel portfolio_messages.",
+        icon: supabaseSaved ? "success" : "warning",
         confirmButtonColor: SWAL_OK,
-        timer: 2000,
+        timer: 5000,
         timerProgressBar: true,
       });
       setFormData({ name: "", email: "", message: "" });
     } catch (error) {
-      if (error.request?.status === 0) {
+      const isNetworkError = error.request?.status === 0 || /Network Error/i.test(error?.message || "");
+      const isSupabaseRls = error?.code === "42501" || /row-Level security/i.test(error?.message || "");
+
+      if (isNetworkError) {
         Swal.fire({
           title: "Berhasil!",
           text: "Pesan Anda telah berhasil terkirim!",
@@ -68,7 +108,16 @@ const ContactPage = () => {
           timerProgressBar: true,
         });
         setFormData({ name: "", email: "", message: "" });
+      } else if (isSupabaseRls) {
+        console.warn("Supabase RLS denied insert:", error);
+        Swal.fire({
+          title: "Terkirim, tapi belum tersimpan",
+          text: "Pesan berhasil dikirim, tetapi Supabase menolak penyimpanan karena kebijakan RLS. Periksa policy pada tabel portfolio_messages.",
+          icon: "warning",
+          confirmButtonColor: SWAL_OK,
+        });
       } else {
+        console.error("Contact submit failed:", error);
         Swal.fire({
           title: "Gagal!",
           text: "Terjadi kesalahan. Silakan coba lagi nanti.",
