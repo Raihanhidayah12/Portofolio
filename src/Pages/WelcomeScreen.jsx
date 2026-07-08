@@ -10,7 +10,7 @@ import { SITE } from "../config/site";
 import { EASE_SMOOTH } from "../lib/motion";
 import "./WelcomeScreen.css";
 
-const TYPEWRITER_TEXT = `${SITE.brandName} — Dev`;
+const TYPEWRITER_TEXT = `Loading Portfolio...`;
 const TYPEWRITER_DELAY_MS = 900;
 const TYPEWRITER_SPEED_MS = 58;
 const HOLD_AFTER_TYPE_MS = 500;
@@ -250,22 +250,22 @@ const WelcomeScreen = ({ onLoadingComplete }) => {
                 </motion.p>
 
                 <motion.h1
-                  className="text-3xl font-bold tracking-tight sm:text-4xl md:text-6xl md:leading-[1.1]"
+                  className="text-3xl font-bold tracking-tight sm:text-4xl md:text-6xl md:leading-[1.2]"
                   variants={titleContainer}
                   initial="hidden"
                   animate="visible"
                 >
                   <motion.span
                     variants={titleWord}
-                    className="welcome-title-gradient inline-block"
+                    className="welcome-title-gradient inline-block pb-2"
                   >
-                    {SITE.brandName}
+                    Welcome to
                   </motion.span>
                   <motion.span
                     variants={titleWord}
-                    className="mt-2 block text-2xl font-medium text-zinc-500 sm:text-3xl md:text-4xl"
+                    className="mt-2 block text-2xl font-medium text-sky-400 sm:text-3xl md:text-4xl"
                   >
-                    Portfolio
+                    My Work
                   </motion.span>
                 </motion.h1>
 

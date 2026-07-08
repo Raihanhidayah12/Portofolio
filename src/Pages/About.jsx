@@ -1,6 +1,6 @@
-import React, { memo, useMemo, useState, useEffect } from "react"
+import { memo, useMemo, useState, useEffect } from "react"
 import { GitHubCalendar } from "react-github-calendar"
-import { FileText, Code, Award, Globe, ArrowUpRight, Mail, GraduationCap, Briefcase, Users, BookOpen } from "lucide-react"
+import { Code, Award, Globe, ArrowUpRight, GraduationCap, Briefcase, Users, BookOpen } from "lucide-react"
 import { aosStaggerDelay } from "../lib/aos"
 import { SITE } from "../config/site"
 import { SOCIAL_PROFILES } from "../config/social"
@@ -13,6 +13,32 @@ import {
   GlowLink,
 } from "../components/ui/layout"
 
+// Constants
+const START_DATE = new Date("2021-07-01");
+const GITHUB_CALENDAR_THEME = {
+  light: ["#161b22", "#0e4429", "#006d32", "#26a641", "#39d353"],
+  dark: ["#161b22", "#0e4429", "#006d32", "#26a641", "#39d353"],
+};
+
+// Helper Functions
+const readCachedCount = (key) => {
+  try {
+    return JSON.parse(localStorage.getItem(key) || "[]").length;
+  } catch {
+    return 0;
+  }
+};
+
+const calculateYearsOfExperience = (startDate) => {
+  const today = new Date();
+  return (
+    today.getFullYear() -
+    startDate.getFullYear() -
+    (today < new Date(today.getFullYear(), startDate.getMonth(), startDate.getDate()) ? 1 : 0)
+  );
+};
+
+// Components
 const ProfileImage = memo(() => (
   <div className="flex justify-end items-center sm:p-12 sm:py-0 sm:pb-0 p-0 py-2 pb-2">
     <div 
@@ -43,6 +69,8 @@ const ProfileImage = memo(() => (
   </div>
 ));
 
+ProfileImage.displayName = "ProfileImage";
+
 const StatCard = memo(({ icon: Icon, value, label, description, index = 0 }) => (
   <div
     data-aos="fade-up"
@@ -54,32 +82,17 @@ const StatCard = memo(({ icon: Icon, value, label, description, index = 0 }) => 
         <div className="flex h-14 w-14 items-center justify-center border border-zinc-700 bg-zinc-900 text-sky-400 transition-colors group-hover:border-sky-500/50">
           <Icon className="w-7 h-7" />
         </div>
-        <span 
-          className="text-4xl font-bold text-zinc-100"
-          data-aos="fade-up-left"
-          data-aos-duration="1500"
-          data-aos-anchor-placement="top-bottom"
-        >
+        <span className="text-4xl font-bold text-zinc-100">
           {value}
         </span>
       </div>
 
       <div>
-        <p 
-          className="font-mono text-xs uppercase tracking-wider text-zinc-500 mb-2"
-          data-aos="fade-up"
-          data-aos-duration="800"
-          data-aos-anchor-placement="top-bottom"
-        >
+        <p className="font-mono text-xs uppercase tracking-wider text-zinc-500 mb-2">
           {label}
         </p>
         <div className="flex items-center justify-between">
-          <p 
-            className="text-xs text-zinc-600"
-            data-aos="fade-up"
-            data-aos-duration="1000"
-            data-aos-anchor-placement="top-bottom"
-          >
+          <p className="text-xs text-zinc-600">
             {description}
           </p>
           <ArrowUpRight className="w-4 h-4 text-zinc-600 group-hover:text-sky-400 transition-colors" />
@@ -89,13 +102,33 @@ const StatCard = memo(({ icon: Icon, value, label, description, index = 0 }) => 
   </div>
 ));
 
-function readCachedCount(key) {
-  try {
-    return JSON.parse(localStorage.getItem(key) || "[]").length;
-  } catch {
-    return 0;
-  }
-}
+StatCard.displayName = "StatCard";
+
+const TimelineItem = memo(({ item, index }) => (
+  <div
+    className="relative pl-12 sm:pl-16"
+    data-aos="fade-up"
+    data-aos-delay={aosStaggerDelay(index)}
+  >
+    <div className="absolute left-2.5 sm:left-4.5 top-5 flex h-3 w-3 items-center justify-center">
+      <span className="absolute h-3 w-3 rounded-full border border-sky-500/50 bg-[#050508]" />
+      <span className="h-1.5 w-1.5 rounded-full bg-sky-400" />
+    </div>
+
+    <GlowCard className="p-5">
+      <div className="min-w-0">
+        <span className="font-mono text-[10px] uppercase tracking-widest text-sky-500/80">
+          {item.period}
+        </span>
+        <h4 className="text-sm font-semibold text-zinc-100 mt-1">{item.title}</h4>
+        <p className="text-xs text-sky-400/80 mt-0.5">{item.org}</p>
+        <p className="text-xs text-zinc-500 mt-2 leading-relaxed">{item.description}</p>
+      </div>
+    </GlowCard>
+  </div>
+));
+
+TimelineItem.displayName = "TimelineItem";
 
 const TimelineSection = memo(({ title, icon: Icon, items }) => {
   if (!items || !items.length) return null;
@@ -112,31 +145,9 @@ const TimelineSection = memo(({ title, icon: Icon, items }) => {
 
       <div className="relative max-w-2xl mx-auto">
         <div className="absolute left-4 sm:left-6 top-0 bottom-0 w-px bg-zinc-800" aria-hidden />
-
         <div className="space-y-6">
           {items.map((item, index) => (
-            <div
-              key={index}
-              className="relative pl-12 sm:pl-16"
-              data-aos="fade-up"
-              data-aos-delay={aosStaggerDelay(index)}
-            >
-              <div className="absolute left-2.5 sm:left-4.5 top-5 flex h-3 w-3 items-center justify-center">
-                <span className="absolute h-3 w-3 rounded-full border border-sky-500/50 bg-[#050508]" />
-                <span className="h-1.5 w-1.5 rounded-full bg-sky-400" />
-              </div>
-
-              <GlowCard className="p-5">
-                <div className="min-w-0">
-                  <span className="font-mono text-[10px] uppercase tracking-widest text-sky-500/80">
-                    {item.period}
-                  </span>
-                  <h4 className="text-sm font-semibold text-zinc-100 mt-1">{item.title}</h4>
-                  <p className="text-xs text-sky-400/80 mt-0.5">{item.org}</p>
-                  <p className="text-xs text-zinc-500 mt-2 leading-relaxed">{item.description}</p>
-                </div>
-              </GlowCard>
-            </div>
+            <TimelineItem key={index} item={item} index={index} />
           ))}
         </div>
       </div>
@@ -144,25 +155,17 @@ const TimelineSection = memo(({ title, icon: Icon, items }) => {
   );
 });
 
-const AboutPage = () => {
+TimelineSection.displayName = "TimelineSection";
+
+// Custom Hooks
+const useStats = () => {
   const [totalProjects, setTotalProjects] = useState(() => readCachedCount("projects"));
   const [totalCertificates, setTotalCertificates] = useState(() => readCachedCount("certificates"));
-  const [journey, setJourney] = useState({ education: [], experience: [], organization: [] });
-
-  const YearExperience = useMemo(() => {
-    const startDate = new Date("2021-07-01"); // Mulai dari SMK kelas 10 (lulus 2024)
-    const today = new Date();
-    return (
-      today.getFullYear() -
-      startDate.getFullYear() -
-      (today < new Date(today.getFullYear(), startDate.getMonth(), startDate.getDate()) ? 1 : 0)
-    );
-  }, []);
 
   useEffect(() => {
     let cancelled = false;
 
-    async function loadStats() {
+    const loadStats = async () => {
       const [projectsResponse, certificatesResponse] = await Promise.all([
         supabase.from("projects").select("*").order("id", { ascending: false }),
         supabase.from("certificates").select("*").order("id", { ascending: false }),
@@ -181,16 +184,24 @@ const AboutPage = () => {
         setTotalCertificates(certificateData.length);
         localStorage.setItem("certificates", JSON.stringify(certificateData));
       }
-    }
+    };
 
     loadStats();
-    return () => {
-      cancelled = true;
-    };
+    return () => { cancelled = true; };
   }, []);
 
+  return { totalProjects, totalCertificates };
+};
+
+const useJourney = () => {
+  const [journey, setJourney] = useState({ 
+    education: [], 
+    experience: [], 
+    organization: [] 
+  });
+
   useEffect(() => {
-    async function loadJourney() {
+    const loadJourney = async () => {
       const { data, error } = await supabase
         .from("journey")
         .select("*")
@@ -212,11 +223,21 @@ const AboutPage = () => {
         experience: items.filter((i) => i.type === "experience"),
         organization: items.filter((i) => i.type === "organization"),
       });
-    }
+    };
+    
     loadJourney();
   }, []);
 
-  // Memoized stats data
+  return journey;
+};
+
+// Main Component
+// Main Component
+const AboutPage = () => {
+  const { totalProjects, totalCertificates } = useStats();
+  const journey = useJourney();
+  const yearsOfExperience = useMemo(() => calculateYearsOfExperience(START_DATE), []);
+
   const statsData = useMemo(() => [
     {
       icon: Code,
@@ -232,7 +253,7 @@ const AboutPage = () => {
     },
     {
       icon: Globe,
-      value: YearExperience,
+      value: yearsOfExperience,
       label: "Years of Experience",
       description: "Dari SMK hingga semester 5",
     },
@@ -242,7 +263,7 @@ const AboutPage = () => {
       label: "GPA",
       description: "Academic achievement score",
     },
-  ], [totalProjects, totalCertificates, YearExperience]);
+  ], [totalProjects, totalCertificates, yearsOfExperience]);
 
   return (
     <SectionShell
@@ -280,14 +301,13 @@ const AboutPage = () => {
               {SITE.bioAbout}
             </p>
 
-               {/* Quote Section */}
-      <GlowCard
-        className="my-6 border-l-2 border-l-sky-500/80 p-4 text-sm italic text-zinc-400"
-        data-aos="fade-up"
-        data-aos-delay="120"
-      >
-        {SITE.quote}
-      </GlowCard>
+            <GlowCard
+              className="my-6 border-l-2 border-l-sky-500/80 p-4 text-sm italic text-zinc-400"
+              data-aos="fade-up"
+              data-aos-delay="120"
+            >
+              {SITE.quote}
+            </GlowCard>
 
             <div className="flex flex-col lg:flex-row items-stretch lg:items-start gap-3 w-full">
               <GlowLink
@@ -306,6 +326,7 @@ const AboutPage = () => {
           <ProfileImage />
         </div>
 
+        {/* Stats Cards */}
         <a href="#Portofolio">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-16 cursor-pointer">
             {statsData.map((stat, index) => (
@@ -314,35 +335,23 @@ const AboutPage = () => {
           </div>
         </a>
 
-        {/* Journey Sections */}
+        {/* Journey Timeline */}
         <div className="mt-20 space-y-16">
-          <p className="font-mono text-[10px] sm:text-xs uppercase tracking-[0.25em] text-sky-500/90 text-center mb-3" data-aos="fade-up">
-            Journey
-          </p>
-          <h3 className="text-2xl md:text-3xl font-bold text-zinc-100 text-center mb-12" data-aos="fade-up" data-aos-delay="80">
-            Education, Experience & Organization
-          </h3>
+          <div className="text-center">
+            <p className="font-mono text-[10px] sm:text-xs uppercase tracking-[0.25em] text-sky-500/90 mb-3" data-aos="fade-up">
+              Journey
+            </p>
+            <h3 className="text-2xl md:text-3xl font-bold text-zinc-100 mb-12" data-aos="fade-up" data-aos-delay="80">
+              Education, Experience & Organization
+            </h3>
+          </div>
 
-          <TimelineSection
-            title="Education"
-            icon={GraduationCap}
-            items={journey.education}
-          />
-
-          <TimelineSection
-            title="Experience"
-            icon={Briefcase}
-            items={journey.experience}
-          />
-
-          <TimelineSection
-            title="Organization"
-            icon={Users}
-            items={journey.organization}
-          />
+          <TimelineSection title="Education" icon={GraduationCap} items={journey.education} />
+          <TimelineSection title="Experience" icon={Briefcase} items={journey.experience} />
+          <TimelineSection title="Organization" icon={Users} items={journey.organization} />
         </div>
 
-        {/* GitHub Contributions */}
+        {/* GitHub Activity */}
         <div className="mt-16" data-aos="fade-up">
           <div className="flex items-center gap-3 mb-8 max-w-2xl mx-auto">
             <div className="flex h-8 w-8 items-center justify-center border border-zinc-700 bg-zinc-900 text-sky-400">
@@ -359,10 +368,7 @@ const AboutPage = () => {
                 fontSize={12}
                 blockSize={12}
                 blockMargin={4}
-                theme={{
-                  light: ["#161b22", "#0e4429", "#006d32", "#26a641", "#39d353"],
-                  dark: ["#161b22", "#0e4429", "#006d32", "#26a641", "#39d353"],
-                }}
+                theme={GITHUB_CALENDAR_THEME}
                 labels={{
                   totalCount: `{{count}} contributions in the last year`,
                 }}
