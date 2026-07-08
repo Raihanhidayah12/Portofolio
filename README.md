@@ -1,19 +1,18 @@
 ﻿# Portfolio V5
 
-Portfolio web modern untuk **Muhammad Raihan Hidayah** — mahasiswa D3 Teknologi Informasi Universitas Brawijaya. Dibangun dengan **React (Vite)**, **Tailwind CSS**, dan **Supabase**, proyek ini menyajikan halaman publik single-page serta dashboard admin untuk mengelola konten.
+Portfolio website modern untuk **Muhammad Raihan Hidayah** — mahasiswa D3 Teknologi Informasi Universitas Brawijaya. Portfolio ini dibuat dengan **React (Vite)**, **Tailwind CSS**, dan **Supabase** untuk memberikan tampilan publik yang menarik plus dashboard admin untuk mengelola konten.
 
 ---
 
 ## ✨ Highlights
 
-- **UI profesional** — tema editorial sky/zinc, border glow, dan layout kartu modern
-- **Interaktif** — animasi smooth dengan Framer Motion, AOS, dan efek grid scan
-- **Responsive** — optimal untuk mobile, tablet, laptop, dan desktop
-- **SEO-ready** — 
-eact-helmet-async, meta tags, dan JSON-LD Person schema
-- **Admin dashboard** — CRUD proyek, sertifikat, foto, tech stack, journey, komentar, dan pesan kontak
-- **Proteksi foto** — watermark overlay + block drag/right-click untuk gallery dan preview
-- **Download watermark** — unduhan foto otomatis dilengkapi watermark ter-embed
+- **UI profesional** — desain gelap modern dengan border glow dan layout kartu
+- **Interaktif** — animasi halus menggunakan Framer Motion dan AOS
+- **Responsive** — tampil baik pada mobile, tablet, dan desktop
+- **SEO-aware** — meta tags dan JSON-LD untuk personal branding
+- **Admin dashboard** — kelola proyek, sertifikat, foto, tech stack, journey, komentar, dan pesan
+- **Proteksi foto** — watermark overlay + blok drag/right-click
+- **Download watermark** — gambar yang diunduh membawa watermark ter-embed
 
 ---
 
@@ -26,38 +25,36 @@ eact-helmet-async, meta tags, dan JSON-LD Person schema
 | Backend | Supabase (Auth, Postgres, Storage, Realtime) |
 | Animasi | Framer Motion, AOS |
 | UI | Material UI, Lucide Icons, SweetAlert2 |
-| 3D / Visual | Three.js, @react-three/fiber, @react-three/drei |
+| 3D / Visual | Three.js, postprocessing |
 | Tools | react-helmet-async, Axios, Supabase JS |
 
 ---
 
 ## 📄 Fitur Utama
 
-### Publik
+### Untuk pengunjung umum
 
-- Splash screen / welcome gate
-- Hero section dengan CTA, social links, dan CV download
-- About section dengan bio, quote, dan stat cards
-- Portofolio tab untuk kategori Web / App / UI-UX
-- Halaman detail proyek dengan teknologi, fitur, dan CTA
-- Contact form dengan email FormSubmit dan penyimpanan pesan ke Supabase
+- Halaman depan dengan CTA, tautan sosial, dan tombol download CV
+- Section About dengan bio, quote, dan statistik
+- Portofolio dengan filter kategori dan halaman detail proyek
+- Contact form yang mengirim email dan menyimpan pesan ke Supabase
 - Gallery foto photography dengan preview modal dan watermark
 
-### Admin
+### Untuk admin
 
-- Login Supabase Auth untuk admin
-- Dashboard proyek: tambah, edit, hapus, publish
-- Dashboard sertifikat: upload dan kelola
-- Dashboard foto: upload, edit, publish/hide
-- Tech stack manager berdasarkan kategori
-- Journey manager untuk pengalaman dan edukasi
+- Login admin via Supabase Auth
+- Kelola proyek: tambah, edit, hapus, publish
+- Kelola sertifikat: upload dan atur tampilannya
+- Kelola foto: upload, edit, publish/hide
+- Kelola tech stack berdasarkan kategori
+- Kelola journey pengalaman dan pembelajaran
 - Moderasi komentar realtime
 
 ---
 
 ## 📁 Struktur Proyek
 
-`
+```
 Portofolio/
 ├── public/
 ├── scripts/
@@ -75,7 +72,7 @@ Portofolio/
 ├── .env.example
 ├── package.json
 └── vercel.json
-`
+```
 
 ---
 
@@ -84,48 +81,48 @@ Portofolio/
 ### Prasyarat
 
 - Node.js >= 18.x
-- Akun Supabase
+- Supabase account
 
-### 1. Clone & install
+### 1. Clone repo dan install dependencies
 
-`ash
+```bash
 git clone https://github.com/Raihanhidayah12/Portofolio.git
 cd Portofolio
 npm install
-`
+```
 
-### 2. Buat file .env
+### 2. Buat file `.env`
 
-Salin .env.example ke .env dan isi dengan kredensial Supabase:
+Salin `.env.example` ke `.env` kemudian isi nilai Supabase:
 
-`env
+```env
 VITE_SUPABASE_URL=https://YOUR_PROJECT_REF.supabase.co
 VITE_SUPABASE_PUBLISHABLE_KEY=sb_publishable_...
 SUPABASE_SERVICE_ROLE_KEY=sb_secret_...
 ADMIN_EMAIL=admin@example.com
 ADMIN_PASSWORD=YourSecurePassword123!
 ADMIN_USERNAME=admin
-`
+```
 
-> Jangan commit file .env.
+> Jangan commit file `.env`.
 
 ### 3. Jalankan admin setup
 
-`ash
+```bash
 npm run create-admin
-`
+```
 
-Jika perlu panduan tambahan:
+Jika butuh panduan tambahan:
 
-`ash
+```bash
 npm run setup-admin
-`
+```
 
 ### 4. Jalankan lokal
 
-`ash
+```bash
 npm run dev
-`
+```
 
 Buka http://localhost:5173.
 
@@ -133,12 +130,13 @@ Buka http://localhost:5173.
 
 ## 🧱 Supabase
 
-- Tabel: projects, certificates, tech_stack, portfolio_comments, portfolio_messages, journey, profiles
-- Storage Bucket: project-images, certificate-images, profile-images
-- Realtime: portfolio_comments, portfolio_messages
-- Auth: Supabase Auth + custom table profiles
+- Tabel: `projects`, `certificates`, `tech_stack`, `portfolio_comments`, `portfolio_messages`, `journey`, `profiles`
+- Storage Bucket: `project-images`, `certificate-images`, `profile-images`
+- Realtime: `portfolio_comments`, `portfolio_messages`
+- Auth: Supabase Auth + custom table `profiles`
+- Contoh SQL dan policy tersedia di folder `supabase/`
 
-SQL contoh tersedia di folder supabase/.
+> Jika Row Level Security (RLS) aktif pada `portfolio_messages`, jalankan policy insert agar pesan dari form bisa tersimpan.
 
 ---
 
@@ -146,46 +144,26 @@ SQL contoh tersedia di folder supabase/.
 
 | Perintah | Deskripsi |
 |----------|-----------|
-| 
-pm run dev | Jalankan development server |
-| 
-pm run build | Build produksi |
-| 
-pm run preview | Preview hasil build |
-| 
-pm run lint | Jalankan ESLint |
-| 
-pm run create-admin | Buat user admin |
-| 
-pm run reset-admin | Reset password admin |
-| 
-pm run verify-admin | Verifikasi admin setup |
-| 
-pm run setup-admin | Panduan setup admin |
-| 
-pm run sync-profile-credentials | Sinkron profil auth |
-
----
-
-## 📌 Fitur Khusus
-
-- **Proteksi foto** — watermark overlay pada gallery dan preview modal, serta block drag/right-click
-- **Image download watermark** — watermark ter-embed saat unduhan foto gallery
-- **Admin dashboard** — kelola konten tanpa deploy ulang
-- **Performance-aware** — animasi disesuaikan untuk devices low-end
-- **SEO-ready** — 
-eact-helmet-async, meta tag, dan JSON-LD
+| `npm run dev` | Jalankan development server |
+| `npm run build` | Build produksi |
+| `npm run preview` | Preview hasil build |
+| `npm run lint` | Jalankan ESLint |
+| `npm run create-admin` | Buat user admin |
+| `npm run reset-admin` | Reset password admin |
+| `npm run verify-admin` | Verifikasi admin setup |
+| `npm run setup-admin` | Panduan setup admin |
+| `npm run sync-profile-credentials` | Sinkron profil auth |
 
 ---
 
 ## 🔧 Troubleshooting
 
-- Supabase env missing — pastikan .env berisi variabel VITE_SUPABASE_URL dan VITE_SUPABASE_PUBLISHABLE_KEY
-- Login admin gagal — pastikan user admin ada di tabel profiles dengan 
-ole = 'admin'
-- Komentar atau pesan tidak muncul — pastikan tabel `portfolio_comments` dan `portfolio_messages` ada dan Realtime diaktifkan di Supabase
-- Route 404 setelah deploy — perlu konfigurasi SPA rewrite / fallback ke index.html
-- Website lambat — build lalu preview untuk memeriksa hasil produksi
+- Supabase env missing — cek `.env` untuk `VITE_SUPABASE_URL` dan `VITE_SUPABASE_PUBLISHABLE_KEY`
+- Login admin gagal — pastikan user admin tersedia di tabel `profiles` dengan `role = 'admin'`
+- Komentar atau pesan tidak muncul — pastikan tabel `portfolio_comments` dan `portfolio_messages` ada serta Realtime aktif
+- Pesan tidak tersimpan — periksa policy RLS di tabel `portfolio_messages`
+- Route 404 setelah deploy — perlu SPA rewrite / fallback ke `index.html`
+- Website lambat — jalankan build lalu preview untuk memeriksa performa
 
 ---
 
