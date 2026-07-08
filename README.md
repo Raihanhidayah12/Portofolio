@@ -7,12 +7,12 @@ Portofolio web modern untuk **Muhammad Raihan Hidayah** — mahasiswa D3 Teknolo
 ## ✨ Highlights
 
 - **Welcome screen** — intro cinematic (typewriter terminal, progress bar, ambient glow)
-- **Hero interaktif** — video workspace, grid scan, rotasi role, tech stack dari database
+- **Hero interaktif** — video workspace, grid scan, rotasi role, tech stack dari database, dan tombol Download CV terpusat
 - **BorderGlow (React Bits)** — efek border & glow pada kartu dan tombol
 - **Animasi halus** — Framer Motion + AOS terpusat, mendukung `prefers-reduced-motion`
 - **Tema editorial** — palet sky / zinc, layout grid, tipografi mono untuk label
 - **SEO** — `react-helmet-async`, JSON-LD Person schema
-- **Admin dashboard** — CRUD proyek, sertifikat, tech stack, moderasi komentar
+- **Admin dashboard** — CRUD proyek (dengan kategori Web/App/UI-UX), sertifikat, tech stack, journey, moderasi komentar
 
 ---
 
@@ -36,9 +36,9 @@ Portofolio web modern untuk **Muhammad Raihan Hidayah** — mahasiswa D3 Teknolo
 | Bagian | Route / Anchor | Deskripsi |
 |--------|----------------|-----------|
 | Welcome | `/` (pertama kali) | Splash screen + transisi ke landing |
-| Home | `#Home` | Hero, CTA, sosial, tech pills (Supabase) |
-| About | `#About` | Bio, quote, CV, stat cards |
-| Portofolio | `#Portofolio` | Tab proyek & sertifikat, tech stack loop |
+| Home | `#Home` | Hero, CTA, sosial, tech pills (Supabase), CV Download |
+| About | `#About` | Bio, quote, stat cards |
+| Portofolio | `#Portofolio` | Tab proyek (kategori: Web, App, UI/UX) & sertifikat, tech stack loop |
 | Detail proyek | `/project/:slug` | Halaman detail per proyek |
 | Contact | `#Contact` | Form kirim pesan (FormSubmit) + komentar realtime |
 | 404 | `*` | Halaman tidak ditemukan |
@@ -48,7 +48,7 @@ Portofolio web modern untuk **Muhammad Raihan Hidayah** — mahasiswa D3 Teknolo
 | Route | Fitur |
 |-------|--------|
 | `/login` | Login Supabase Auth (role `admin`) |
-| `/dashboard/projects` | CRUD proyek + upload gambar |
+| `/dashboard/projects` | CRUD proyek (Kategori: Web, App, UI/UX) + upload gambar |
 | `/dashboard/certificates` | Upload & hapus sertifikat |
 | `/dashboard/tech-stack` | CRUD tech stack + kategori (Frontend, Backend, Database, Mobile, Design, Cloud, DevOps) |
 | `/dashboard/journey` | CRUD riwayat edukasi, pengalaman kerja, & organisasi |

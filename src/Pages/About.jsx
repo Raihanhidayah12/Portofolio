@@ -1,6 +1,6 @@
 import React, { memo, useMemo, useState, useEffect } from "react"
 import { GitHubCalendar } from "react-github-calendar"
-import { FileText, Code, Award, Globe, ArrowUpRight, Mail, GraduationCap, Briefcase, Users } from "lucide-react"
+import { FileText, Code, Award, Globe, ArrowUpRight, Mail, GraduationCap, Briefcase, Users, BookOpen } from "lucide-react"
 import { aosStaggerDelay } from "../lib/aos"
 import { SITE } from "../config/site"
 import { SOCIAL_PROFILES } from "../config/social"
@@ -150,7 +150,7 @@ const AboutPage = () => {
   const [journey, setJourney] = useState({ education: [], experience: [], organization: [] });
 
   const YearExperience = useMemo(() => {
-    const startDate = new Date("2021-11-06");
+    const startDate = new Date("2021-07-01"); // Mulai dari SMK kelas 10 (lulus 2024)
     const today = new Date();
     return (
       today.getFullYear() -
@@ -234,7 +234,13 @@ const AboutPage = () => {
       icon: Globe,
       value: YearExperience,
       label: "Years of Experience",
-      description: "Continuous learning journey",
+      description: "Dari SMK hingga semester 5",
+    },
+    {
+      icon: BookOpen,
+      value: "3.86",
+      label: "GPA",
+      description: "Academic achievement score",
     },
   ], [totalProjects, totalCertificates, YearExperience]);
 
@@ -301,7 +307,7 @@ const AboutPage = () => {
         </div>
 
         <a href="#Portofolio">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16 cursor-pointer">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-16 cursor-pointer">
             {statsData.map((stat, index) => (
               <StatCard key={stat.label} {...stat} index={index} />
             ))}
