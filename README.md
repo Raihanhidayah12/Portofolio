@@ -64,6 +64,7 @@ Portofolio web modern untuk **Muhammad Raihan Hidayah** — mahasiswa D3 Teknolo
 | `/login` | Login Supabase Auth (role `admin`) |
 | `/dashboard/projects` | CRUD proyek (Kategori: Web, App, UI/UX) + upload gambar |
 | `/dashboard/certificates` | Upload & hapus sertifikat |
+| `/dashboard/photos` | Upload, edit, publish/unpublish foto photography |
 | `/dashboard/tech-stack` | CRUD tech stack + kategori (Frontend, Backend, Database, Mobile, Design, Cloud, DevOps) |
 | `/dashboard/journey` | CRUD riwayat edukasi, pengalaman kerja, & organisasi |
 | `/dashboard/comments` | Hapus, pin/unpin komentar |
@@ -149,7 +150,29 @@ ADMIN_EMAIL=admin@example.com
 ADMIN_PASSWORD=YourSecurePassword123!
 ADMIN_USERNAME=admin
 ```
+### 4. Local AI routing tool (`9router`)
 
+This project includes a local `9router` CLI tool as a dev dependency for optional AI/code-tool routing support.
+
+- Install dependencies:
+
+```bash
+npm install
+```
+
+- Start `9router` locally:
+
+```bash
+npm run 9router
+```
+
+- You can also run it directly with:
+
+```bash
+npx 9router
+```
+
+`9router` is a local development tool and is not required for the portfolio app runtime.
 > ⚠️ Jangan commit file `.env`.  
 > Variabel `NEXT_PUBLIC_*` adalah untuk Next.js — **tidak** dipakai di proyek ini.
 

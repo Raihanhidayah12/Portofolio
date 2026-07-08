@@ -281,12 +281,22 @@ const ProjectDetails = () => {
               <div className="space-y-6 md:space-y-10 animate-slideInRight">
                 <div className="relative overflow-hidden border border-zinc-800 group">
                   <div className="absolute inset-0 bg-gradient-to-t from-[#050508] via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10 pointer-events-none" />
-                  <img
-                    src={project.Img}
-                    alt={project.Title}
-                    className="w-full object-cover transform transition-transform duration-700 will-change-transform group-hover:scale-105"
-                    onLoad={() => setIsImageLoaded(true)}
-                  />
+                  <div className="relative" onContextMenu={(e) => e.preventDefault()}>
+                    <img
+                      src={project.Img}
+                      alt={project.Title}
+                      draggable={false}
+                      onDragStart={(e) => e.preventDefault()}
+                      onContextMenu={(e) => e.preventDefault()}
+                      className="w-full object-cover transform transition-transform duration-700 will-change-transform group-hover:scale-105"
+                      onLoad={() => setIsImageLoaded(true)}
+                    />
+                    <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+                      <span className="text-white/10 text-xs md:text-sm uppercase tracking-widest transform -rotate-12 select-none">
+                        © {SITE.fullName}
+                      </span>
+                    </div>
+                  </div>
                   <div className="absolute inset-0 border-2 border-white/0 group-hover:border-white/10 transition-colors duration-300 rounded-2xl" />
                 </div>
 

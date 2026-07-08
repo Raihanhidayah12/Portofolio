@@ -3,6 +3,7 @@ import React, { useEffect, useState, useCallback, useMemo } from "react";
 
 
 import { supabase } from "../supabase";
+import { SITE } from "../config/site";
 
 import { mapProjects, mapCertificates, mapTechStack } from "../utils/supabase/mappers";
 import { TECH_STACK_PUBLIC_COLUMNS } from "../utils/techStackQuery";
@@ -29,8 +30,10 @@ import AOS from "aos";
 import { aosStaggerDelay } from "../lib/aos";
 
 import Certificate from "../components/Certificate";
+import PhotoPreviewModal from "../components/PhotoPreviewModal";
+import { createWatermarkDataUrl } from "../utils/watermark";
 
-import { Code, Award } from "lucide-react";
+import { Code, Award, Camera } from "lucide-react";
 
 import {
 
@@ -193,11 +196,16 @@ export default function FullWidthTabs() {
 
   const [certificates, setCertificates] = useState([]);
 
+  const [photos, setPhotos] = useState([]);
+
   const [techStacks, setTechStacks] = useState([]);
 
   const [showAllProjects, setShowAllProjects] = useState(false);
 
   const [showAllCertificates, setShowAllCertificates] = useState(false);
+
+  const [showAllPhotos, setShowAllPhotos] = useState(false);
+  const [selectedPhoto, setSelectedPhoto] = useState(null);
 
   const [activeCategory, setActiveCategory] = useState(null);
 
@@ -216,11 +224,13 @@ export default function FullWidthTabs() {
 
     try {
 
-      const [projectsResponse, certificatesResponse, techStackResponse] = await Promise.all([
+      const [projectsResponse, certificatesResponse, photosResponse, techStackResponse] = await Promise.all([
 
         supabase.from("projects").select("*").order("id", { ascending: false }),
 
         supabase.from("certificates").select("*").order("id", { ascending: false }),
+
+        supabase.from("photos").select("*").eq("is_published", true).order("order_index", { ascending: true }),
 
         supabase
 
@@ -240,6 +250,8 @@ export default function FullWidthTabs() {
 
       if (certificatesResponse.error) throw certificatesResponse.error;
 
+      if (photosResponse.error) console.warn("Photos table not found yet:", photosResponse.error);
+
       if (techStackResponse.error) throw techStackResponse.error;
 
 
@@ -248,11 +260,19 @@ export default function FullWidthTabs() {
 
       const certificateData = mapCertificates(certificatesResponse.data);
 
+      const photoData = photosResponse.data || [];
+
       const techStackData = mapTechStack(techStackResponse.data);
 
 
 
       setProjects(projectData);
+
+      setCertificates(certificateData);
+
+      setPhotos(photoData);
+
+      setTechStacks(techStackData);
 
       setCertificates(certificateData);
 
@@ -320,9 +340,13 @@ export default function FullWidthTabs() {
 
       setShowAllProjects(prev => !prev);
 
-    } else {
+    } else if (type === 'certificates') {
 
       setShowAllCertificates(prev => !prev);
+
+    } else if (type === 'photos') {
+
+      setShowAllPhotos(prev => !prev);
 
     }
 
@@ -412,6 +436,16 @@ export default function FullWidthTabs() {
               label="Certificates"
 
               {...a11yProps(1)}
+
+            />
+
+            <Tab
+
+              icon={<Camera className="mb-2 w-5 h-5 transition-all duration-300" />}
+
+              label="Photography"
+
+              {...a11yProps(2)}
 
             />
 
@@ -558,6 +592,71 @@ export default function FullWidthTabs() {
 
             )}
 
+          </TabPanel>
+
+          <TabPanel value={value} index={2}>
+            {photos.length === 0 ? (
+              <div className="text-center py-12">
+                <Camera className="w-16 h-16 mx-auto mb-4 text-zinc-700" />
+                <p className="text-zinc-500 text-sm">Photography gallery coming soon...</p>
+                <p className="text-zinc-600 text-xs mt-2">Admin can upload photos from dashboard</p>
+              </div>
+            ) : (
+              <>
+                <div className="container mx-auto">
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
+                    {(showAllPhotos ? photos : photos.slice(0, initialItems * 2)).map((photo, index) => (
+                      <div
+                        key={photo.id || index}
+                        data-aos="fade-up"
+                        data-aos-delay={aosStaggerDelay(index)}
+                      >
+                        <button
+                          type="button"
+                          onClick={() => setSelectedPhoto(photo)}
+                          className="group relative aspect-square overflow-hidden border border-zinc-800 bg-zinc-950/50 hover:border-sky-500/50 transition-all duration-300 w-full h-full"
+                        >
+                          <img
+                            src={photo.image_url}
+                            alt={photo.title || "Photography"}
+                            loading="lazy"
+                            draggable={false}
+                            onDragStart={(e) => e.preventDefault()}
+                            onContextMenu={(e) => e.preventDefault()}
+                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 select-none -webkit-user-drag-none"
+                          />
+                          <div
+                            className="pointer-events-none absolute inset-0"
+                            style={{
+                              backgroundImage: `url('${createWatermarkDataUrl(`${SITE.fullName} • ${new Date().toLocaleString()}`)}')`,
+                              backgroundRepeat: 'repeat',
+                              backgroundSize: '160px 56px',
+                              opacity: 0.18,
+                            }}
+                          />
+                          {photo.title && (
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+                              <p className="text-white text-sm font-medium">{photo.title}</p>
+                            </div>
+                          )}
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                {photos.length > initialItems * 2 && (
+                  <div className="mt-6 w-full flex justify-start">
+                    <ToggleButton
+                      onClick={() => toggleShowMore('photos')}
+                      isShowingMore={showAllPhotos}
+                    />
+                  </div>
+                )}
+                {selectedPhoto && (
+                  <PhotoPreviewModal photo={selectedPhoto} onClose={() => setSelectedPhoto(null)} />
+                )}
+              </>
+            )}
           </TabPanel>
 
         </div>

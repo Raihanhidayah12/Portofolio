@@ -313,16 +313,24 @@ const ProfileCardComponent = ({
             <div className="pc-shine" />
             <div className="pc-glare" />
             <div className="pc-content pc-avatar-content">
-              <img
-                className="avatar"
-                src={avatarUrl}
-                alt={`${name || 'User'} avatar`}
-                loading="lazy"
-                onError={e => {
-                  const t = e.target;
-                  t.style.display = 'none';
-                }}
-              />
+              <div className="relative">
+                <img
+                  className="avatar"
+                  src={avatarUrl}
+                  alt={`${name || 'User'} avatar`}
+                  loading="lazy"
+                  draggable={false}
+                  onDragStart={(e) => e.preventDefault()}
+                  onContextMenu={(e) => e.preventDefault()}
+                  onError={e => {
+                    const t = e.target;
+                    t.style.display = 'none';
+                  }}
+                />
+                <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+                  <span className="text-white/10 text-xs uppercase tracking-wide select-none">© {name}</span>
+                </div>
+              </div>
               {showUserInfo && (
                 <div className="pc-user-info">
                   <div className="pc-user-details">
@@ -331,6 +339,9 @@ const ProfileCardComponent = ({
                         src={miniAvatarUrl || avatarUrl}
                         alt={`${name || 'User'} mini avatar`}
                         loading="lazy"
+                        draggable={false}
+                        onDragStart={(e) => e.preventDefault()}
+                        onContextMenu={(e) => e.preventDefault()}
                         onError={e => {
                           const t = e.target;
                           t.style.opacity = '0.5';

@@ -11,16 +11,17 @@ export default defineConfig({
           'react-vendor': ['react', 'react-dom', 'react-router-dom'],
           'animation': ['framer-motion', 'aos'],
           'mui': ['@mui/material', '@mui/icons-material'],
-          'three': ['three', '@react-three/fiber', '@react-three/drei'],
+          'three': ['three'],
         },
       },
     },
-    minify: 'terser',
-    terserOptions: {
-      compress: {
-        drop_console: true,
-        drop_debugger: true,
-      },
+    minify: 'esbuild',
+    // use esbuild minifier to avoid adding terser as a dependency
+    esbuild: {
+      minify: true,
+      minifyWhitespace: true,
+      minifyIdentifiers: true,
+      minifySyntax: true,
     },
   },
   optimizeDeps: {

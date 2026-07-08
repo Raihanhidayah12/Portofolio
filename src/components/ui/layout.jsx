@@ -35,7 +35,7 @@ export function SectionShell({ id, children, className = "", ...rest }) {
   return (
     <section
       id={id}
-      className={`relative overflow-hidden ${PAGE_BG} ${SECTION_PAD} ${className}`}
+      className={`relative overflow-hidden scroll-mt-28 ${PAGE_BG} ${SECTION_PAD} ${className}`}
       {...rest}
     >
       <PageGridBg />
@@ -276,7 +276,12 @@ export function DashboardPageIcon({ children, className = "" }) {
 }
 
 export function DashboardCard({ children, className = "" }) {
-  return <GlowCard className={className}>{children}</GlowCard>;
+  // add consistent inner padding to separate outer border and inner content
+  return (
+    <GlowCard className={className}>
+      <div className="p-6">{children}</div>
+    </GlowCard>
+  )
 }
 
 export const dashboardNavActive =

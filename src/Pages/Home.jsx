@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, memo, lazy, Suspense } from "react"
+import React, { useState, useEffect, useCallback, memo, lazy, Suspense, useRef } from "react"
 import { Helmet } from "react-helmet-async"
 import { Github, Linkedin, Mail, ArrowUpRight, Instagram, FileText } from "lucide-react"
 import { SOCIAL_PROFILES, SOCIAL_SAME_AS } from "../config/social"
@@ -167,6 +167,9 @@ const Home = () => {
   const [techPills, setTechPills] = useState(FALLBACK_TECH_STACK)
   const [isLoaded, setIsLoaded] = useState(false)
   const [videoSrc, setVideoSrc] = useState("")
+  const videoRef = useRef(null)
+  const directionRef = useRef(1) // 1 = forward, -1 = backward
+  const animationFrameRef = useRef(null)
 
   useEffect(() => {
     setIsLoaded(true)
@@ -182,6 +185,46 @@ const Home = () => {
       return () => clearTimeout(id);
     }
   }, [])
+
+  // Ping-pong video effect (bounce back and forth)
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || !videoSrc) return;
+
+    const playPingPong = () => {
+      const currentTime = video.currentTime;
+      const duration = video.duration;
+
+      // Check if we need to reverse direction
+      if (directionRef.current === 1 && currentTime >= duration - 0.05) {
+        // Near end, start going backward
+        directionRef.current = -1;
+        video.pause();
+      } else if (directionRef.current === -1 && currentTime <= 0.05) {
+        // Near start, start going forward
+        directionRef.current = 1;
+        video.play().catch(() => {});
+      }
+
+      // Manual backward playback
+      if (directionRef.current === -1 && currentTime > 0) {
+        video.currentTime = Math.max(0, currentTime - 0.033); // ~30fps backward
+      }
+
+      animationFrameRef.current = requestAnimationFrame(playPingPong);
+    };
+
+    video.addEventListener('loadedmetadata', () => {
+      video.play().catch(() => {});
+      animationFrameRef.current = requestAnimationFrame(playPingPong);
+    });
+
+    return () => {
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
+    };
+  }, [videoSrc]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -349,14 +392,14 @@ const Home = () => {
                 </div>
                 {videoSrc && (
                 <video
+                  ref={videoRef}
                   src={videoSrc}
                   autoPlay
-                  loop
                   muted
                   playsInline
                   preload="none"
                   loading="lazy"
-                  className="relative z-[1] w-full object-cover pt-6 aspect-square"
+                  className="relative z-[1] w-full object-cover pt-6 aspect-square transition-opacity duration-500"
                   aria-label="Futuristic software engineer workspace"
                 />
                 )}

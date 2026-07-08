@@ -21,11 +21,17 @@ const CardProject = ({ Img, Title, Description, Link: ProjectLink, id, Category 
   return (
     <div className="group relative h-full w-full interactive-lift">
       <GlowCard className="flex h-full flex-col overflow-hidden">
-        <div className="relative overflow-hidden border-b border-zinc-800/80">
+        <div
+          className="relative overflow-hidden border-b border-zinc-800/80"
+          onContextMenu={(e) => e.preventDefault()}
+        >
           <img
             src={Img}
             alt={Title}
-            className="aspect-[16/8] w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+            draggable={false}
+            onDragStart={(e) => e.preventDefault()}
+            onContextMenu={(e) => e.preventDefault()}
+            className="aspect-[16/8] w-full object-cover transition-transform duration-500 group-hover:scale-[1.03] -webkit-user-drag-none select-none"
           />
         </div>
 

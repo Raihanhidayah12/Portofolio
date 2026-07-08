@@ -3,10 +3,11 @@ import { Routes, Route, Link, Navigate, useLocation, useNavigate } from 'react-r
 import { supabase } from '../supabase'
 import Projects from './dashboard/Projects'
 import Certificates from './dashboard/Certificates'
+import Photos from './dashboard/Photos'
 import Comments from './dashboard/Comments'
 import TechStack from './dashboard/TechStack'
 import Journey from './dashboard/Journey'
-import { FolderGit2, Award, MessageSquare, LogOut, LayoutDashboard, Menu, Boxes, Route as RouteIcon } from 'lucide-react'
+import { FolderGit2, Award, MessageSquare, LogOut, LayoutDashboard, Menu, Boxes, Route as RouteIcon, Camera } from 'lucide-react'
 import {
   DASHBOARD_BG,
   DashboardPageIcon,
@@ -18,6 +19,7 @@ import {
 const NAV_ITEMS = [
   { to: 'projects', label: 'Projects', icon: FolderGit2 },
   { to: 'certificates', label: 'Certificates', icon: Award },
+  { to: 'photos', label: 'Photography', icon: Camera },
   { to: 'tech-stack', label: 'Tech Stack', icon: Boxes },
   { to: 'journey', label: 'Journey', icon: RouteIcon },
   { to: 'comments', label: 'Comments', icon: MessageSquare },
@@ -129,6 +131,7 @@ export default function Dashboard() {
             <Route index element={<Navigate to="projects" replace />} />
             <Route path="projects" element={<Projects />} />
             <Route path="certificates" element={<Certificates />} />
+            <Route path="photos" element={<Photos />} />
             <Route path="tech-stack" element={<TechStack />} />
             <Route path="journey" element={<Journey />} />
             <Route path="comments" element={<Comments />} />

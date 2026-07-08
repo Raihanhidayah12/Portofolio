@@ -75,7 +75,7 @@ const Navbar = () => {
       initial={reduceMotion ? false : { y: -12, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.45, ease: EASE_SMOOTH, delay: 0.05 }}
-      className={`fixed top-0 z-50 w-full border-b transition-[background-color,border-color,backdrop-filter] duration-300 ease-smooth ${
+      className={`fixed top-0 z-[60] w-full border-b transition-[background-color,border-color,backdrop-filter] duration-300 ease-smooth ${
         isOpen || scrolled
           ? "border-zinc-800/80 bg-[#050508]/95 backdrop-blur-md"
           : "border-transparent bg-transparent"
