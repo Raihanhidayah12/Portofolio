@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
-import React, { useState, lazy, Suspense } from "react";
+import React, { useState, lazy, Suspense, useMemo } from "react";
 import { HelmetProvider } from "react-helmet-async";
 import "./index.css";
 import Navbar from "./components/Navbar";
@@ -21,8 +21,20 @@ const ContactPage = lazy(() => import("./Pages/Contact"));
 const ProjectDetails = lazy(() => import("./components/ProjectDetail"));
 const WelcomeScreen = lazy(() => import("./Pages/WelcomeScreen"));
 const NotFoundPage = lazy(() => import("./Pages/404"));
+
+// Detect low-end device
+const isLowEndDevice = () => {
+  if (typeof window === 'undefined') return false;
+  return (
+    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+    navigator.hardwareConcurrency < 4 ||
+    navigator.deviceMemory < 4
+  );
+};
+
 const LandingPage = ({ showWelcome, setShowWelcome }) => {
   useAOS(!showWelcome);
+  const isLowEnd = useMemo(() => isLowEndDevice(), []);
 
   return (
     <>
@@ -127,13 +139,17 @@ function LandingPageWrapper() {
 }
 
 function App() {
+  const isLowEnd = useMemo(() => isLowEndDevice(), []);
+  
   return (
     <HelmetProvider>
-      <div className="pointer-events-none">
-        <AnimatedBackground />
-      </div>
+      {!isLowEnd && (
+        <div className="pointer-events-none">
+          <AnimatedBackground />
+        </div>
+      )}
       <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-        <FluidCursor />
+        {!isLowEnd && <FluidCursor />}
         <AppRoutes />
       </BrowserRouter>
     </HelmetProvider>

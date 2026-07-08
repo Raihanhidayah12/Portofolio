@@ -60,8 +60,9 @@ const ProfileImage = memo(() => (
           <img
             src="/Photo.jpg"
             alt="Profile"
-            className="w-full h-full object-cover transition-transform duration-500 ease-smooth group-hover:scale-[1.03]"
             loading="lazy"
+            decoding="async"
+            className="w-full h-full object-cover transition-transform duration-500 ease-smooth group-hover:scale-[1.03]"
           />
         </GlowCard>
       </div>
@@ -286,7 +287,7 @@ const AboutPage = () => {
                 Hello, I'm
               </span>
               <span 
-                className="block w-full max-w-full mt-2 text-gray-200 font-bold leading-tight text-2xl sm:text-3xl lg:text-4xl text-justify [text-align-last:justify]"
+                className="block w-full mt-2 text-gray-200 font-bold leading-tight text-xl sm:text-2xl md:text-3xl lg:text-4xl"
                 itemProp="name"
               >
                 {SITE.fullName}

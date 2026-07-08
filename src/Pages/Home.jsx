@@ -354,7 +354,8 @@ const Home = () => {
                   loop
                   muted
                   playsInline
-                  preload="metadata"
+                  preload="none"
+                  loading="lazy"
                   className="relative z-[1] w-full object-cover pt-6 aspect-square"
                   aria-label="Futuristic software engineer workspace"
                 />

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import {
   motion,
   AnimatePresence,
@@ -137,6 +137,11 @@ const WelcomeScreen = ({ onLoadingComplete }) => {
   const [typewriterDone, setTypewriterDone] = useState(false);
   const [progress, setProgress] = useState(0);
   const reduceMotion = useReducedMotion();
+  const isLowEnd = useMemo(() => {
+    if (typeof window === 'undefined') return false;
+    return /Android|webOS|iPhone|iPad|iPod/i.test(navigator.userAgent) || 
+           navigator.hardwareConcurrency < 4;
+  }, []);
 
   const handleTypewriterComplete = useCallback(() => {
     setTypewriterDone(true);
@@ -200,7 +205,7 @@ const WelcomeScreen = ({ onLoadingComplete }) => {
           variants={exitVariants}
         >
           <PageGridBg />
-          <AmbientLayer reduceMotion={reduceMotion} />
+          {!isLowEnd && <AmbientLayer reduceMotion={reduceMotion} />}
 
           {!reduceMotion && (
             <>
