@@ -10,9 +10,7 @@ Portfolio website modern untuk **Muhammad Raihan Hidayah** — mahasiswa D3 Tekn
 - **Interaktif** — animasi halus menggunakan Framer Motion dan AOS
 - **Responsive** — tampil baik pada mobile, tablet, dan desktop
 - **SEO-aware** — meta tags dan JSON-LD untuk personal branding
-- **Admin dashboard** — kelola proyek, sertifikat, foto, tech stack, journey, komentar, dan pesan
-- **Proteksi foto** — watermark overlay + blok drag/right-click
-- **Download watermark** — gambar yang diunduh membawa watermark ter-embed
+- **Admin dashboard** — kelola proyek, sertifikat, tech stack, journey, komentar, dan pesan
 
 ---
 
@@ -38,14 +36,12 @@ Portfolio website modern untuk **Muhammad Raihan Hidayah** — mahasiswa D3 Tekn
 - Section About dengan bio, quote, dan statistik
 - Portofolio dengan filter kategori dan halaman detail proyek
 - Contact form yang mengirim email dan menyimpan pesan ke Supabase
-- Gallery foto photography dengan preview modal dan watermark
 
 ### Untuk admin
 
 - Login admin via Supabase Auth
 - Kelola proyek: tambah, edit, hapus, publish
 - Kelola sertifikat: upload dan atur tampilannya
-- Kelola foto: upload, edit, publish/hide
 - Kelola tech stack berdasarkan kategori
 - Kelola journey pengalaman dan pembelajaran
 - Moderasi komentar realtime

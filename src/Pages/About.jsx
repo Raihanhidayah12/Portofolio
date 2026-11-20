@@ -1,11 +1,12 @@
 import { memo, useMemo, useState, useEffect } from "react"
 import { GitHubCalendar } from "react-github-calendar"
-import { Code, Award, Globe, ArrowUpRight, GraduationCap, Briefcase, Users, BookOpen } from "lucide-react"
+import { Code, Award, Globe, ArrowUpRight, BookOpen } from "lucide-react"
 import { aosStaggerDelay } from "../lib/aos"
 import { SITE } from "../config/site"
 import { SOCIAL_PROFILES } from "../config/social"
 import { supabase } from "../supabase"
 import { mapProjects, mapCertificates, mapJourney } from "../utils/supabase/mappers"
+import JourneyTabs from "../components/JourneyTabs"
 import {
   SectionShell,
   SectionHeader,
@@ -104,59 +105,6 @@ const StatCard = memo(({ icon: Icon, value, label, description, index = 0 }) => 
 ));
 
 StatCard.displayName = "StatCard";
-
-const TimelineItem = memo(({ item, index }) => (
-  <div
-    className="relative pl-12 sm:pl-16"
-    data-aos="fade-up"
-    data-aos-delay={aosStaggerDelay(index)}
-  >
-    <div className="absolute left-2.5 sm:left-4.5 top-5 flex h-3 w-3 items-center justify-center">
-      <span className="absolute h-3 w-3 rounded-full border border-sky-500/50 bg-[#050508]" />
-      <span className="h-1.5 w-1.5 rounded-full bg-sky-400" />
-    </div>
-
-    <GlowCard className="p-5">
-      <div className="min-w-0">
-        <span className="font-mono text-[10px] uppercase tracking-widest text-sky-500/80">
-          {item.period}
-        </span>
-        <h4 className="text-sm font-semibold text-zinc-100 mt-1">{item.title}</h4>
-        <p className="text-xs text-sky-400/80 mt-0.5">{item.org}</p>
-        <p className="text-xs text-zinc-500 mt-2 leading-relaxed">{item.description}</p>
-      </div>
-    </GlowCard>
-  </div>
-));
-
-TimelineItem.displayName = "TimelineItem";
-
-const TimelineSection = memo(({ title, icon: Icon, items }) => {
-  if (!items || !items.length) return null;
-
-  return (
-    <div>
-      <div className="flex items-center gap-3 mb-8 max-w-2xl mx-auto" data-aos="fade-up">
-        <div className="flex h-8 w-8 items-center justify-center border border-zinc-700 bg-zinc-900 text-sky-400">
-          <Icon className="w-4 h-4" />
-        </div>
-        <h4 className="text-lg font-semibold text-zinc-100">{title}</h4>
-        <span className="font-mono text-[10px] text-zinc-600">({items.length})</span>
-      </div>
-
-      <div className="relative max-w-2xl mx-auto">
-        <div className="absolute left-4 sm:left-6 top-0 bottom-0 w-px bg-zinc-800" aria-hidden />
-        <div className="space-y-6">
-          {items.map((item, index) => (
-            <TimelineItem key={index} item={item} index={index} />
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-});
-
-TimelineSection.displayName = "TimelineSection";
 
 // Custom Hooks
 const useStats = () => {
@@ -337,19 +285,17 @@ const AboutPage = () => {
         </a>
 
         {/* Journey Timeline */}
-        <div className="mt-20 space-y-16">
-          <div className="text-center">
+        <div className="mt-20">
+          <div className="text-center mb-8">
             <p className="font-mono text-[10px] sm:text-xs uppercase tracking-[0.25em] text-sky-500/90 mb-3" data-aos="fade-up">
               Journey
             </p>
-            <h3 className="text-2xl md:text-3xl font-bold text-zinc-100 mb-12" data-aos="fade-up" data-aos-delay="80">
+            <h3 className="text-2xl md:text-3xl font-bold text-zinc-100" data-aos="fade-up" data-aos-delay="80">
               Education, Experience & Organization
             </h3>
           </div>
 
-          <TimelineSection title="Education" icon={GraduationCap} items={journey.education} />
-          <TimelineSection title="Experience" icon={Briefcase} items={journey.experience} />
-          <TimelineSection title="Organization" icon={Users} items={journey.organization} />
+          <JourneyTabs journey={journey} />
         </div>
 
         {/* GitHub Activity */}

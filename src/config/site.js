@@ -3,13 +3,12 @@
 export const SITE = {
   fullName: "Muhammad Raihan Hidayah",
   brandName: "Raihan",
-  jobTitle: "Frontend Developer · UI/UX · Mobile · IoT · Photo & Video",
+  jobTitle: "Frontend Developer · UI/UX · Mobile · IoT",
   heroRoles: [
     { line1: "Frontend", line2: "Developer" },
     { line1: "UI/UX", line2: "Designer" },
     { line1: "Mobile App", line2: "Developer" },
     { line1: "IoT & Automation", line2: "Engineer" },
-    { line1: "Photographer &", line2: "Videographer" },
   ],
   heroTaglines: [
     "Information Technology Student",

@@ -172,3 +172,86 @@ body {
 .animate-soft-pulse {
   animation: softPulse 2.2s ease-in-out infinite;
 }
+
+@property --fade-start {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
+@property --fade-end {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
+@keyframes reveal-fade-start {
+  to {
+    --fade-start: var(--fade-size);
+  }
+}
+
+@keyframes hide-fade-end {
+  from {
+    --fade-end: var(--fade-size);
+  }
+}
+
+.journey-tablist {
+  overflow-x: auto;
+  scroll-snap-type: inline proximity;
+  scrollbar-width: none;
+  --fade-size: 2.5rem;
+  scroll-padding-inline: var(--fade-size);
+  mask:
+    linear-gradient(black, black) no-clip subtract,
+    linear-gradient(to right, black, transparent) 0 0 / var(--fade-start) 100% no-repeat no-clip,
+    linear-gradient(to right, transparent, black) 100% 0 / var(--fade-end) 100% no-repeat no-clip;
+  transition: --fade-start 0.2s, --fade-end 0.2s;
+}
+
+.journey-tablist::-webkit-scrollbar {
+  display: none;
+}
+
+.journey-tablist.more-start {
+  --fade-start: var(--fade-size);
+}
+
+.journey-tablist.more-end {
+  --fade-end: var(--fade-size);
+}
+
+@supports (animation-timeline: scroll()) {
+  .journey-tablist {
+    animation: reveal-fade-start linear both, hide-fade-end linear both;
+    animation-timeline: scroll(self inline);
+    animation-range: 0 var(--fade-size), calc(100% - var(--fade-size)) 100%;
+    transition: none;
+  }
+}
+
+.journey-tab {
+  position: relative;
+  flex: none;
+  scroll-snap-align: start;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .journey-tab[aria-selected="true"] {
+    color: var(--accent);
+    background-color: rgba(56, 189, 248, 0.08);
+  }
+
+  .journey-tab[aria-selected="true"]::after {
+    content: "";
+    position: absolute;
+    inset: auto 0 0;
+    border-block-end: 2px solid var(--accent);
+  }
+}
+
+.journey-panels > [role="tabpanel"] {
+  grid-column: 1;
+  grid-row: 1;
+}
